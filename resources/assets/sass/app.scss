@@ -5,8 +5,26 @@
 // Variables
 @import "variables";
 
+
+@import "./bulma/utilities/all";
+$blue: #72d0eb;
+$primary: $blue;
+
+
+
+
+@import "./bulma/base/all";
+@import "./bulma/components/all";
+@import "./bulma/elements/all";
+@import "./bulma/grid/all";
+@import "./bulma/layout/all";
+@import "./bulma/utilities/all";
+
+
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "./components/layout";
+
+
 
 
