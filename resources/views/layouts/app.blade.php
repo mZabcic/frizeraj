@@ -14,18 +14,16 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-
+    @yield('styles')
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
-    <script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+      <script src="{{ asset('js/app.js') }}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  @yield('scripts')
 </head>
 <body>
  <nav class="nav has-shadow">
@@ -35,7 +33,7 @@
       </a>
       <a class="nav-item is-tab is-hidden-mobile" href="/">Naslovna</a>
       <a class="nav-item is-tab is-hidden-mobile">Cjenik</a>
-      <a class="nav-item is-tab is-hidden-mobile">O nama</a>
+     <a class="nav-item is-tab is-hidden-mobile">O nama</a>
     </div>
     <span class="nav-toggle">
       <span></span>
@@ -60,32 +58,30 @@
                                             {{ csrf_field() }}
                                         </form>
         @endif
-    
-  
+
+
 </nav>
  <div id="app" class="main-content">
     <div class="container is-fluid">
         @yield('content')
         </div>
   </div>
-  <footer class="footer__wrapper">
-  <div class="content has-text-centered footer__container">
+  <footer class="footer-wrapper">
+  <div class="content has-text-centered footer-container">
       <p>
         <a href="https://github.com/mZabcic/frizeraj"><b>Frizeraj</b></a> by Nikad Skupa. The source code is licensed
-        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. 
+        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
       </p>
   </div>
 </footer>
+
+
 @if(session()->has('message'))
     <input id="notification" type="hidden" value="{{ session()->get('message') }}"/>
 @endif
-        
-        
-    
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+
     <script src="{{ asset('js/all.js') }}"></script>
-      
 </body>
 </html>
