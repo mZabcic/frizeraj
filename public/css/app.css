@@ -14464,19 +14464,33 @@ body {
   margin-top: 10px;
 }
 
-.footer__container {
+.footer-container {
   margin-bottom: 15px;
-  margin-top: 10px;
-  color: white;
+  height:30px;
+  font-size: 13px;
+  line-height: 30px;
+  margin-top: 17px;
+  color:#A5A5A5;
+  float:right;
+  padding-right: 20px;
+
 }
 
-.footer__wrapper {
-  border-top-style: groove;
-  background-color: #72d0eb;
+.footer-wrapper {
+    background-color: #FFFFFF;
 }
 
 .nav-item:hover {
   text-decoration: none !important;
+}.termini{
+  width:90%;
+  max-width: 1000px;
+}#calendar a{
+  color:#666666;
+}#calendar a:visited{
+  color:#666666;
+}.fc-content{
+  color:#FFFFFF;
 }
 
 /*# sourceMappingURL=app.css.map */
