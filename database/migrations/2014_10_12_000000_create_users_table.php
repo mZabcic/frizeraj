@@ -9,7 +9,7 @@ class CreateUsersTable extends Migration
     /**
      * Run the migrations.
      *
-     * @return void
+     * @return void 
      */
     public function up()
     {
@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->integer('role')->foreign()->references('id')->on('roles');
-            $table->integer('favorite_hairdresser')->foreign()->references('id')->on('users');;
+            $table->integer('favorite_hairdresser')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

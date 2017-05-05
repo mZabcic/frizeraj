@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 
     <!-- Scripts -->
     <script>
@@ -24,6 +25,7 @@
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 </head>
 <body>
  <nav class="nav has-shadow">
@@ -31,10 +33,9 @@
       <a class="nav-item" href="/">
         <img src="./img/logo.png" alt="Logo">
       </a>
-      <a class="nav-item is-tab is-hidden-mobile is-active" href="/">Home</a>
-      <a class="nav-item is-tab is-hidden-mobile">Features</a>
-      <a class="nav-item is-tab is-hidden-mobile">Pricing</a>
-      <a class="nav-item is-tab is-hidden-mobile">About</a>
+      <a class="nav-item is-tab is-hidden-mobile" href="/">Naslovna</a>
+      <a class="nav-item is-tab is-hidden-mobile">Cjenik</a>
+      <a class="nav-item is-tab is-hidden-mobile">O nama</a>
     </div>
     <span class="nav-toggle">
       <span></span>
@@ -42,13 +43,12 @@
       <span></span>
     </span>
     <div class="nav-right nav-menu">
-      <a class="nav-item is-tab is-hidden-tablet is-active">Home</a>
-      <a class="nav-item is-tab is-hidden-tablet">Features</a>
-      <a class="nav-item is-tab is-hidden-tablet">Pricing</a>
-      <a class="nav-item is-tab is-hidden-tablet">About</a>
+      <a class="nav-item is-tab is-hidden-tablet">Naslovna</a>
+      <a class="nav-item is-tab is-hidden-tablet">Cjenik</a>
+      <a class="nav-item is-tab is-hidden-tablet">O nama</a>
     @if (Auth::guest())
-                            <a class="nav-item is-tab" href="/login">Login</a>
-                            <a class="nav-item is-tab" href="/register">Register</a>
+                            <a class="nav-item is-tab" href="/login">Prijava</a>
+                            <a class="nav-item is-tab" href="/register">Registracija</a>
         @else
              <a class="nav-item is-tab" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -76,6 +76,9 @@
       </p>
   </div>
 </footer>
+@if(session()->has('message'))
+    <input id="notification" type="hidden" value="{{ session()->get('message') }}"/>
+@endif
         
         
     

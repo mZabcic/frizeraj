@@ -19,7 +19,7 @@ class CreateAssignmentTable extends Migration
             $table->integer('customer_id')->foreign()->references('id')->on('users');
             $table->dateTime('start_at');
             $table->integer('job_id')->foreign()->references('id')->on('jobs');
-            $table->integer('wanted_hairstyle_id')->foreign()->references('id')->on('wanted_hairstyles');
+            $table->integer('wanted_hairstyle_id');
             $table->boolean('confirmed');
             $table->timestamps();
         });
