@@ -44,6 +44,11 @@
       <a class="nav-item is-tab is-hidden-tablet">Naslovna</a>
       <a class="nav-item is-tab is-hidden-tablet">Cjenik</a>
       <a class="nav-item is-tab is-hidden-tablet">O nama</a>
+          @if (!Auth::guest())
+          @if (Auth::user()->isAdmin())
+             <a class="nav-item is-tab" href="/login">Admin</a>
+          @endif
+          @endif
     @if (Auth::guest())
                             <a class="nav-item is-tab" href="/login">Prijava</a>
                             <a class="nav-item is-tab" href="/register">Registracija</a>

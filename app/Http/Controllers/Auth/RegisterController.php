@@ -47,12 +47,21 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        $messages = [
+    'required'    => 'Polje :attribute je obavezno!',
+    'max'    => 'Polje :attribute ne smije biti veće od :size znaka.',
+    'between' => 'Polje :attribute mora biti između :min - :max.',
+    'email'      => 'Polje :attribute mora imati format email-a.',
+    'confirmed' => 'Polje :attribute mora biti potvrđena.',
+     'min' => 'Polje :attribute mora biti veće od 6 znakova.',
+     'unique' => 'Već postoji korisnik s tom email adresom'
+];
         return Validator::make($data, [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
+            'Ime' => 'required|max:255',
+            'Prezime' => 'required|max:255',
+            'Email' => 'required|email|max:255|unique:users',
+            'Lozinka' => 'required|min:6|confirmed',
+        ], $messages);
     }
 
     /**
@@ -64,10 +73,10 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'first_name' => $data['Ime'],
+            'last_name' => $data['Prezime'],
+            'email' => $data['Email'],
+            'password' => bcrypt($data['Lozinka']),
             'role' => 1,
             'favorite_hairdresser' => null
         ]);

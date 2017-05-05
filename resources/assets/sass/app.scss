@@ -24,6 +24,7 @@ $primary: $blue;
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "./components/layout";
+@import "./components/bulma_fix";
 
 
 
