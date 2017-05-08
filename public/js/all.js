@@ -30,6 +30,9 @@ $( document ).ready(function() {
 }
     $('#notification').each(function(){
          toastr["success"]($(this).val());
+    });
+    $('#app_errors').each(function(){
+         toastr["error"]($(this).val());
     })
 });
 //# sourceMappingURL=all.js.map

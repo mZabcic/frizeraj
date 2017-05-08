@@ -46,7 +46,7 @@
       <a class="nav-item is-tab is-hidden-tablet">O nama</a>
           @if (!Auth::guest())
           @if (Auth::user()->isAdmin())
-             <a class="nav-item is-tab" href="/login">Admin</a>
+             <a class="nav-item is-tab" href="/frizer">Admin</a>
           @endif
           @endif
     @if (Auth::guest())
@@ -84,6 +84,10 @@
 @if(session()->has('message'))
     <input id="notification" type="hidden" value="{{ session()->get('message') }}"/>
 @endif
+@if(session()->has('greska'))
+    <input id="app_errors" type="hidden" value="{{ session()->get('greska') }}"/>
+@endif
+
 
     <!-- Scripts -->
 

@@ -15,6 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', function () {
+    return redirect('/');
+});
+
 Auth::routes();
 
 Route::get('/termini', 'HomeController@index');
+
+Route::get('/users', 'admin\user\UserController@index')->middleware('role:admin', 'web');
