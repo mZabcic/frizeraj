@@ -15,7 +15,7 @@ class CreateAssignmentTable extends Migration
     {
          Schema::create('assignments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('workin_day_id')->foreign()->references('id')->on('working_day');
+            $table->integer('working_day_id')->foreign()->references('id')->on('working_day');
             $table->integer('customer_id')->foreign()->references('id')->on('users');
             $table->dateTime('start_at');
             $table->integer('job_id')->foreign()->references('id')->on('jobs');

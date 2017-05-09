@@ -31,56 +31,39 @@
   		maxTime: "20:00:00",
 			locale: 'hr',
 			events: [
+				@foreach($termini as $key=>$termin)
 				{
-					title: 'All Day Event',
-					start: '2017-05-01'
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: '2017-05-09T16:00:00'
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: '2017-05-16T16:00:00'
-				},
-				{
-					title: 'Meeting',
-					start: '2017-05-12T10:30:00',
-					end: '2017-05-12T12:30:00'
-				},
-				{
-					title: 'Lunch',
-					start: '2017-05-12T12:00:00'
-				},
-				{
-					title: 'Meeting',
-					start: '2017-05-12T14:30:00'
-				},
-				{
-					title: 'Happy Hour',
-					start: '2017-05-12T17:30:00',
-					end:'2017-05-12T17:30:00'
-				},
-				{
-					title: 'Dinner',
-					start: '2017-05-12T20:00:00'
-				},
-				{
-					title: 'Birthday Party',
-					start: '2017-05-13T07:00:00'
-				},
-				{
-					title: 'Click for Google',
-					url: 'http://google.com/',
-					start: '2017-05-28'
+					title: 'Frizer {{$termin->user->first_name}} {{$termin->user->last_name}}',
+					start: '{{$termin->start->toAtomString()}}',
+					end: '{{$termin->end->toAtomString()}}',
+					url: '/termin/{{$termin->start->timestamp}}/{{$termin->end->timestamp}}',
+					color: colorfunc({{$termin->user->id}})
 				}
+				@if($key != count($termini)-1)
+				,
+				@endif
+				@endforeach
 			]
 		});
 
 	});
 
+
+function colorfunc(id){
+	var colors = [
+		"#CA473D",
+		"#1437EE",
+		"#EE4714",
+		"#143E21",
+		"#EE14D1",
+		"#B130EE",
+		"#1D9F65",
+		"#7E6D40",
+		"#2A9166",
+		"#DE4C7B"
+	]
+	return colors[id%10];
+}
 </script>
 @endsection
 

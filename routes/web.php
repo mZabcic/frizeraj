@@ -21,6 +21,6 @@ Route::get('/home', function () {
 
 Auth::routes();
 
-Route::get('/termini', 'HomeController@index');
+Route::get('/termini', 'HomeController@termini');
 
 Route::get('/korisnici', 'UserController@index')->middleware('role:admin');
