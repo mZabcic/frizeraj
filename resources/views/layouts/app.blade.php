@@ -29,7 +29,7 @@
  <nav class="nav has-shadow">
     <div class="nav-left">
       <a class="nav-item" href="/">
-        <img src="./img/logo.png" alt="Logo">
+        <img src="/img/logo.png" alt="Logo">
       </a>
       <a class="nav-item is-tab is-hidden-mobile" href="/">Naslovna</a>
       <a class="nav-item is-tab is-hidden-mobile">Cjenik</a>

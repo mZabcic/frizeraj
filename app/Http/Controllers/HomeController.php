@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\WorkingDay;
 use App\Assignment;
+use App\User;
+use App\Job;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -25,13 +27,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function termini()
     {
-        return view('home');
-    }
-
-    public function termini(){
-      //kako izracunat termine? (za korisnika)
+        //kako izracunat termine? (za korisnika)
       //1. za svaki dan pogledat working days, uzet start i end iz tablice
       //2. pogledat postojece termine gdje je start izmedju start i end-a povucenog iz working days
       //sortirano uzlazno po start_at
@@ -40,51 +38,66 @@ class HomeController extends Controller
 
 
       //za iduca 2 tjedna
-      if(Auth::user()->hasRole('customer')){
-      $working_days = WorkingDay::where('from',">=",Carbon::now()->addHours(-12))->where("from","<=",Carbon::now()->addHours(-12)->addWeeks(2))->get();
-      $termini = [];
-      foreach($working_days as $working_day){
-        $start = $working_day->from;
-        //$assgs = Assignment::where('working_day_id', $working_day->id)->get();
-        foreach($working_day->assignments as $assg){
-          $termin = new \stdClass();
-          $termin->user = $working_day->user;
-          $termin->start = $start;
-          $termin->end = $assg->start_at;
-
-          if($termin->end->gt(Carbon::now())){
-            if($termin->start->lt(Carbon::now()))
-              $termin->start = Carbon::now();
-            array_push($termini, $termin);
-          }
-          $start = $assg->start_at->addMinutes($assg->job->duration_in_minutes);
-        }
-        $termin = new \stdClass();
-        $termin->user = $working_day->user;
-        $termin->start = $start;
-        $termin->end = $working_day->until;
-        array_push($termini, $termin);
-      }
-      //return $termini;
-      return view('home')->with('termini', $termini)->with('today', Carbon::now());
-    }
-      //za frizera
-      if(Auth::user()->hasRole('hairdresser')){
-        $termini=[];
-        $working_days = WorkingDay::where('user_id',Auth::user()->id)->get();
-        foreach($working_days as $working_day){
-          foreach($working_day->assignments as $assg){
+      if (Auth::user()->hasRole('customer')) {
+          $working_days = WorkingDay::where('from', ">=", Carbon::now()->addHours(-12))->where("from", "<=", Carbon::now()->addHours(-12)->addWeeks(2))->get();
+          $termini = [];
+          foreach ($working_days as $working_day) {
+              $start = $working_day->from;
+        foreach ($working_day->assignments as $assg) {
             $termin = new \stdClass();
-            $termin->user = $assg->user;
-            $termin->start = $assg->start_at;
-            $termin->id = $assg->id;
-            $termin->end = $assg->start_at->addMinutes($assg->job->duration_in_minutes);
-            array_push($termini, $termin);
-          }
+            $termin->user = $working_day->user;
+            $termin->start = $start;
+            $termin->end = $assg->start_at;
+
+            if ($termin->end->gt(Carbon::now())) {
+                if ($termin->start->lt(Carbon::now())) {
+                    $termin->start = Carbon::now();
+                }
+                array_push($termini, $termin);
+            }
+            $start = $assg->start_at->addMinutes($assg->job->duration_in_minutes);
         }
-        return view('home')->with('termini', $termini)->with('today', Carbon::now());
+              $termin = new \stdClass();
+              $termin->user = $working_day->user;
+              $termin->start = $start;
+              $termin->end = $working_day->until;
+              array_push($termini, $termin);
+          }
+      return view('termini')->with('termini', $termini)->with('today', Carbon::now());
+      }
+
+
+      //za frizera
+      if (Auth::user()->hasRole('hairdresser')) {
+          $termini=[];
+          $working_days = WorkingDay::where('user_id', Auth::user()->id)->get();
+          foreach ($working_days as $working_day) {
+              foreach ($working_day->assignments as $assg) {
+                  $termin = new \stdClass();
+                  $termin->user = $assg->user;
+                  $termin->start = $assg->start_at;
+                  $termin->id = $assg->id;
+                  $termin->end = $assg->start_at->addMinutes($assg->job->duration_in_minutes);
+                  array_push($termini, $termin);
+              }
+          }
+          return view('termini')->with('termini', $termini)->with('today', Carbon::now());
       }
       //dohvatit termine start = start_at end = start_at + time iz jobs
-
     }
+
+    function rasponTermina($frizer_id, $from, $to){
+        $from_date = Carbon::createFromTimestamp($from);
+        $to_date = Carbon::createFromTimestamp($to);
+        $times = [];
+        $time = $from_date;
+        while($time<$to_date){
+          array_push($times, $time);
+          $time = clone $time->addMinutes(15);
+        }
+        $hairdresser = User::where('id',$frizer_id)->first();
+        $jobs = Job::all();
+        return view('rasponTermina')->with('times', $times)->with("hairdresser", $hairdresser)->with('jobs', $jobs);
+    }
+
 }

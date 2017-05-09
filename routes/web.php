@@ -24,3 +24,5 @@ Auth::routes();
 Route::get('/termini', 'HomeController@termini');
 
 Route::get('/korisnici', 'UserController@index')->middleware('role:admin');
+
+Route::get('/termin/{frizer_id}/{from}/{to}', 'HomeController@rasponTermina');
