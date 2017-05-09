@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
 @section('styles')
+<link href="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css" rel="stylesheet" />
 <link href='{{ asset('fullcalendar/fullcalendar.min.css') }}' rel='stylesheet' />
 <link href='{{ asset('fullcalendar/fullcalendar.print.min.css') }}' rel='stylesheet' media='print' />
 @endsection
 
 @section('scripts')
+<script src="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
 <script src='{{ asset('fullcalendar/lib/moment.min.js') }}'></script>
 <script src='{{ asset('fullcalendar/fullcalendar.min.js') }}'></script>
 <script src='{{ asset('fullcalendar/locale-all.js') }}'></script>
@@ -20,7 +22,7 @@
 				right: 'agendaWeek,agendaDay,listWeek',
 
 			},
-			defaultDate: '2017-05-12',
+			defaultDate: '{{$today->toDateString()}}',
 			defaultView: "agendaWeek",
 			navLinks: true, // can click day/week names to navigate views
 			editable: true,
@@ -29,21 +31,33 @@
 			eventDurationEditable:false,
 			minTime: "08:00:00",
   		maxTime: "20:00:00",
+			slotEventOverlap:false,
 			locale: 'hr',
 			events: [
 				@foreach($termini as $key=>$termin)
 				{
-					title: 'Frizer {{$termin->user->first_name}} {{$termin->user->last_name}}',
+					title: '{{Auth::user()->hasRole("customer")?"Frizer":"Klijent"}} {{$termin->user->first_name}} {{$termin->user->last_name}}',
 					start: '{{$termin->start->toAtomString()}}',
 					end: '{{$termin->end->toAtomString()}}',
+					@if(Auth::user()->hasRole("customer"))
 					url: '/termin/{{$termin->start->timestamp}}/{{$termin->end->timestamp}}',
+					@endif
+					@if(Auth::user()->hasRole("hairdresser"))
+					url: '/termin/{{ $termin->id }}',
+					@endif
+					description: '{{Auth::user()->hasRole("customer")?"Frizer":"Klijent"}} {{$termin->user->first_name}} {{$termin->user->last_name}}',
 					color: colorfunc({{$termin->user->id}})
 				}
 				@if($key != count($termini)-1)
 				,
 				@endif
 				@endforeach
-			]
+			],
+			eventRender: function(event, element) {
+        element.qtip({
+            content: event.description
+        });
+			}
 		});
 
 	});

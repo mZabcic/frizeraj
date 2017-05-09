@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\WorkingDay;
 use App\Assignment;
+use Illuminate\Support\Facades\Auth;
+
 class HomeController extends Controller
 {
     /**
@@ -38,12 +40,13 @@ class HomeController extends Controller
 
 
       //za iduca 2 tjedna
+      if(Auth::user()->hasRole('customer')){
       $working_days = WorkingDay::where('from',">=",Carbon::now()->addHours(-12))->where("from","<=",Carbon::now()->addHours(-12)->addWeeks(2))->get();
       $termini = [];
       foreach($working_days as $working_day){
         $start = $working_day->from;
-        $assgs = Assignment::where('working_day_id', $working_day->id)->get();
-        foreach($assgs as $assg){
+        //$assgs = Assignment::where('working_day_id', $working_day->id)->get();
+        foreach($working_day->assignments as $assg){
           $termin = new \stdClass();
           $termin->user = $working_day->user;
           $termin->start = $start;
@@ -63,8 +66,24 @@ class HomeController extends Controller
         array_push($termini, $termin);
       }
       //return $termini;
-      return view('home')->with('termini', $termini);
+      return view('home')->with('termini', $termini)->with('today', Carbon::now());
+    }
       //za frizera
+      if(Auth::user()->hasRole('hairdresser')){
+        $termini=[];
+        $working_days = WorkingDay::where('user_id',Auth::user()->id)->get();
+        foreach($working_days as $working_day){
+          foreach($working_day->assignments as $assg){
+            $termin = new \stdClass();
+            $termin->user = $assg->user;
+            $termin->start = $assg->start_at;
+            $termin->id = $assg->id;
+            $termin->end = $assg->start_at->addMinutes($assg->job->duration_in_minutes);
+            array_push($termini, $termin);
+          }
+        }
+        return view('home')->with('termini', $termini)->with('today', Carbon::now());
+      }
       //dohvatit termine start = start_at end = start_at + time iz jobs
 
     }
