@@ -9,7 +9,7 @@ use App\Assignment;
 use App\User;
 use App\Job;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Input;
 class HomeController extends Controller
 {
     /**
@@ -114,6 +114,7 @@ class HomeController extends Controller
     public function rezervacijaTermina(Request $request)
     {
         //TODO: verifikator, sliku kompresat i spremit u bazu!
+        //TODO: fixat kod za termine
         //provjeri jos jednom jel termin zauzet (krug od 1h)
         $slobodno = true;
         $time = Carbon::createFromTimestamp($request->time);
@@ -121,6 +122,7 @@ class HomeController extends Controller
         $job = Job::where('id', $job_id)->first();
         //prvo za pocetna vremena, da se ne poklapaju
         $assignments = Assignment::where('start_at', ">=", Carbon::now())->where('start_at', '<=', Carbon::now()->addMinutes($job->duration_in_minutes));
+        return $assignments->get();
         if ($assignments->count()>0) {
             $slobodno = false;
         }
@@ -130,14 +132,21 @@ class HomeController extends Controller
         foreach ($assignments as $assg) {
             $start = $assg->start_at;
             $end = clone $assg->start_at->addMinutes($assg->job->duration_in_minutes);
-            if ($time>$start && $time<$end) {
+            if ($time>=$start && $time<=$end) {
                 $slobodno = false;
+                echo "false";
                 break;
             }
         }
         if ($slobodno == true) {
             //upisi sliku u bazu
+            //dd($request);
+            //echo $request->hairstyle;
+            if ($request->hasFile('hairstyle'))
+            {
+              echo "lol";
 
+            }
         //sa id-em upisi sve u assignments
         $assg = new Assignment;
             $assg->customer_id = Auth::user()->id;

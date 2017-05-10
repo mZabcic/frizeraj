@@ -15,7 +15,7 @@
               <div class="panel-heading">Rezervacija termina</div>
               <div class="panel-body">
 
-                <form method="POST" action="{{route('rezervacijaTermina')}}">
+                <form method="POST" action="{{route('rezervacijaTermina')}}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                   <div class="form-group">
                     <label for="frizer">Frizer:</label>
@@ -50,7 +50,7 @@
             <label for="hairstyles">Željena frizura (opcionalno):</label>
             <div class="fileupload fileupload-new" data-provides="fileupload">
              <span class="btn btn-file btn-default"><span class="fileupload-new">Izaberi sliku</span>
-             <span class="fileupload-exists">Promijeni sliku</span>         <input type="file" /></span>
+             <span class="fileupload-exists">Promijeni sliku</span>         <input type="file" name="hairstyle" /></span>
              <span class="fileupload-preview"></span>
              <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
             </div>
@@ -72,7 +72,6 @@
 
 <script>
 $('#jobs').change(function () {
-  console.log('test');
     var selectedText = $(this).find("option:selected").data('description');
     $("#jobs-desc").html(selectedText);
 });
