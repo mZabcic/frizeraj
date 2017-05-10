@@ -15,6 +15,6 @@ class WorkingDay extends Model
     }
     public function assignments()
     {
-      return $this->hasMany('App\Assignment', 'working_day_id', 'id');
+      return $this->hasMany('App\Assignment', 'working_day_id', 'id')->orderBy('start_at', 'ASC');
     }
 }

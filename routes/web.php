@@ -21,8 +21,7 @@ Route::get('/home', function () {
 
 Auth::routes();
 
-Route::get('/termini', 'HomeController@termini');
-
+Route::get('/termini', 'HomeController@termini')->name('termini');
 Route::get('/korisnici', 'UserController@index')->middleware('role:admin');
-
 Route::get('/termin/{frizer_id}/{from}/{to}', 'HomeController@rasponTermina');
+Route::post('/termin', 'HomeController@rezervacijaTermina')->name('rezervacijaTermina');

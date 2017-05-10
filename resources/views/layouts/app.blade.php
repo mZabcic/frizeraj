@@ -53,6 +53,7 @@
                             <a class="nav-item is-tab" href="/login">Prijava</a>
                             <a class="nav-item is-tab" href="/register">Registracija</a>
         @else
+          <a class="nav-item is-tab" href="{{ route('termini') }}">Termini</a>
              <a class="nav-item is-tab" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

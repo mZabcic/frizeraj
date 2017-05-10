@@ -43,27 +43,35 @@ class HomeController extends Controller
           $termini = [];
           foreach ($working_days as $working_day) {
               $start = $working_day->from;
-        foreach ($working_day->assignments as $assg) {
-            $termin = new \stdClass();
-            $termin->user = $working_day->user;
-            $termin->start = $start;
-            $termin->end = $assg->start_at;
-
-            if ($termin->end->gt(Carbon::now())) {
+              foreach ($working_day->assignments as $assg) {
+                  $termin = new \stdClass();
+                  $termin->user = $working_day->user;
+                  $termin->start = $start;
+                  $termin->end = $assg->start_at;
+              //provjera jel ovo vrijeme proslo? i jel start jednak endu
+            if ($termin->end->gt(Carbon::now()) && $termin->start != $termin->end) {
                 if ($termin->start->lt(Carbon::now())) {
                     $termin->start = Carbon::now();
                 }
                 array_push($termini, $termin);
             }
-            $start = $assg->start_at->addMinutes($assg->job->duration_in_minutes);
-        }
+                  $start = $assg->start_at->addMinutes($assg->job->duration_in_minutes);
+              }
+
+              //provjera jel ovo vrijeme proslo?
               $termin = new \stdClass();
               $termin->user = $working_day->user;
               $termin->start = $start;
               $termin->end = $working_day->until;
-              array_push($termini, $termin);
+              if ($termin->end->gt(Carbon::now()) && $termin->start != $termin->end) {
+                  if ($termin->start->lt(Carbon::now())) {
+                      $termin->start = Carbon::now();
+                  }
+                  array_push($termini, $termin);
+              }
           }
-      return view('termini')->with('termini', $termini)->with('today', Carbon::now());
+          //dd($termini);
+          return view('termini')->with('termini', $termini)->with('today', Carbon::now());
       }
 
 
@@ -86,18 +94,62 @@ class HomeController extends Controller
       //dohvatit termine start = start_at end = start_at + time iz jobs
     }
 
-    function rasponTermina($frizer_id, $from, $to){
+
+
+    public function rasponTermina($frizer_id, $from, $to)
+    {
         $from_date = Carbon::createFromTimestamp($from);
         $to_date = Carbon::createFromTimestamp($to);
         $times = [];
         $time = $from_date;
-        while($time<$to_date){
-          array_push($times, $time);
-          $time = clone $time->addMinutes(15);
+        while ($time<$to_date) {
+            array_push($times, $time);
+            $time = clone $time;
+            $time->addMinutes(15);
         }
-        $hairdresser = User::where('id',$frizer_id)->first();
+        $hairdresser = User::where('id', $frizer_id)->first();
         $jobs = Job::all();
         return view('rasponTermina')->with('times', $times)->with("hairdresser", $hairdresser)->with('jobs', $jobs);
     }
+    public function rezervacijaTermina(Request $request)
+    {
+        //TODO: verifikator, sliku kompresat i spremit u bazu!
+        //provjeri jos jednom jel termin zauzet (krug od 1h)
+        $slobodno = true;
+        $time = Carbon::createFromTimestamp($request->time);
+        $job_id = $request->job;
+        $job = Job::where('id', $job_id)->first();
+        //prvo za pocetna vremena, da se ne poklapaju
+        $assignments = Assignment::where('start_at', ">=", Carbon::now())->where('start_at', '<=', Carbon::now()->addMinutes($job->duration_in_minutes));
+        if ($assignments->count()>0) {
+            $slobodno = false;
+        }
+        //zatim za krajnja vremena da se ne preklapaju
+        $assignments = Assignment::where('start_at', ">=", Carbon::now()->addHours(-1))->where('start_at', '<=', Carbon::now()->addHours(1))->get();
 
+        foreach ($assignments as $assg) {
+            $start = $assg->start_at;
+            $end = clone $assg->start_at->addMinutes($assg->job->duration_in_minutes);
+            if ($time>$start && $time<$end) {
+                $slobodno = false;
+                break;
+            }
+        }
+        if ($slobodno == true) {
+            //upisi sliku u bazu
+
+        //sa id-em upisi sve u assignments
+        $assg = new Assignment;
+            $assg->customer_id = Auth::user()->id;
+            $assg->job_id = $job_id;
+            $assg->start_at = $time;
+            $assg->confirmed = 0;
+            $assg->wanted_hairstyle_id = null;
+            $working_day = WorkingDay::where('user_id', $request->hairdresser)->where('from', "<=", $time)->where('until', ">=", $time)->first();
+            $assg->working_day_id = $working_day->id;
+            $assg->save();
+        } else {
+            echo "termin zauzet";
+        }
+    }
 }
