@@ -7,6 +7,7 @@
       <th>Ime</th>
       <th>Prezime</th>
       <th>Email adresa</th>
+      
       <th></th>
     </tr>
   </thead>
@@ -23,7 +24,7 @@
           {{$user->email}}
         </td>
         <td>
-           <form id="{{$user->id}}" action="/admin/korisnici/{{$user->id}}/delete" method="post">
+          <form id="{{$user->id}}" action="/admin/korisnici/{{$user->id}}/delete" method="post">
             {{ method_field('DELETE') }}
             {{ csrf_field() }}
            <a class="button is-danger is-outlined" onclick="confirmDelete({{$user->id}})">
@@ -33,7 +34,7 @@
     </span>
   </a>
            </form>
-        </td>
+           </td>
     </tr>
     @endforeach
   </tbody>

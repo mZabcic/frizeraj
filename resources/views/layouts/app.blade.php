@@ -46,7 +46,7 @@
       <a class="nav-item is-tab is-hidden-tablet">O nama</a>
           @if (!Auth::guest())
           @if (Auth::user()->isAdmin())
-             <a class="nav-item is-tab" href="/frizer">Admin</a>
+             <a id="admin-control" class="nav-item is-tab" href="/admin">Admin</a>
           @endif
           @endif
     @if (Auth::guest())
@@ -66,6 +66,18 @@
 
 
 </nav>
+ @if (!Auth::guest())
+@if (Auth::user()->hasRole('admin'))
+<div class="tabs">
+  <ul>
+    <li><a class="admin-menu" href="/admin/korisnici"><span class="icon is-small"><i class="fa fa-user-circle"></i></span>Korisnici</a></li>
+    <li><a class="admin-menu" href="/admin/frizeri"><span class="icon is-small"><i class="fa fa-scissors"></i></span>Frizeri</a></li>
+    <li><a class="admin-menu" href="/admin/administratori"><span class="icon is-small"><i class="fa fa-cogs"></i></span>Administratori</a></li>
+    <li><a class="admin-menu" href="/admin/korisnici/novi"><span class="icon is-small"><i class="fa fa-user-plus"></i></span>Novi korisnik</a></li>
+  </ul>
+</div>
+@endif
+          @endif
  <div id="app" class="main-content">
     <div class="container is-fluid">
         @yield('content')

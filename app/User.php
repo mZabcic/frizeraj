@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Role as Role;
 
@@ -30,32 +31,30 @@ class User extends Authenticatable
     protected $table = 'users';
     
     
-    public function role()
+    public function roleNav()
     {
-        return $this->belongsTo('App\Role', 'role');
+        return $this->belongsTo(Role::class, 'role');
     }
 
      public function isAdmin()
     {
-        foreach ($this->role()->get() as $role)
-        {
-            if ($role->name == 'admin')
+       
+            if ($this->roleNav->name == 'admin')
             {
                 return true;
             }
-        }
+        
 
         return false;
     }
 
     public function hasRole($role) {
-        foreach ($this->role()->get() as $item)
-        {
-            if ($item->name == $role)
+       
+            if ($this->roleNav->name == $role)
             {
                 return true;
             }
-        }
+        
 
         return false;
 
