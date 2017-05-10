@@ -8,8 +8,11 @@ use App\WorkingDay;
 use App\Assignment;
 use App\User;
 use App\Job;
+use App\WantedHairstyle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Intervention\Image\Facades\Image;
+
 class HomeController extends Controller
 {
     /**
@@ -117,24 +120,33 @@ class HomeController extends Controller
         //TODO: fixat kod za termine
         //provjeri jos jednom jel termin zauzet (krug od 1h)
         $slobodno = true;
-        $time = Carbon::createFromTimestamp($request->time);
+        $start_n = Carbon::createFromTimestamp($request->time);
         $job_id = $request->job;
         $job = Job::where('id', $job_id)->first();
-        //prvo za pocetna vremena, da se ne poklapaju
-        $assignments = Assignment::where('start_at', ">=", Carbon::now())->where('start_at', '<=', Carbon::now()->addMinutes($job->duration_in_minutes));
-        return $assignments->get();
+        $time_start2 = clone $start_n;
+        $time_end2 = clone $start_n;
+        $end_n = clone $start_n;
+        $end_n->addMinutes($job->duration_in_minutes);
+        //usporedit startna vremena termina da se ne preklapaju sa novim terminom
+        $assignments = Assignment::where('start_at', ">=", $start_n)->where('start_at', '<', $end_n);
+        //return $assignments->get();
         if ($assignments->count()>0) {
             $slobodno = false;
         }
-        //zatim za krajnja vremena da se ne preklapaju
-        $assignments = Assignment::where('start_at', ">=", Carbon::now()->addHours(-1))->where('start_at', '<=', Carbon::now()->addHours(1))->get();
+        $assignments = Assignment::where('start_at', ">=", $time_start2->addHours(-1))->where('start_at', '<', $time_end2->addHours(1))->get();
 
         foreach ($assignments as $assg) {
             $start = $assg->start_at;
-            $end = clone $assg->start_at->addMinutes($assg->job->duration_in_minutes);
-            if ($time>=$start && $time<=$end) {
+            $end = clone $assg->start_at;
+            $end->addMinutes($assg->job->duration_in_minutes);
+            //usporedit kraj termina dal se preklapa sa pocetkom novog t.
+            if ($end>$start_n && $end<=$end_n) {
                 $slobodno = false;
-                echo "false";
+                break;
+            }
+            //usporedit veliki termin da nije progutao novog termina koj je "unutar" postojeceg
+            if ($start<=$start_n && $end>=$end_n) {
+                $slobodno = false;
                 break;
             }
         }
@@ -142,19 +154,27 @@ class HomeController extends Controller
             //upisi sliku u bazu
             //dd($request);
             //echo $request->hairstyle;
-            if ($request->hasFile('hairstyle'))
-            {
-              echo "lol";
-
+            $hairstyle_id = null;
+            if ($request->hasFile('hairstyle')) {
+                //kod za kompresanje i sejvanje slike u bazu
+              $img = Image::make(Input::file('hairstyle')->getRealPath());
+                $img->resize(null, 200, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $wantedHairstyle = new wantedHairstyle;
+                $wantedHairstyle->picture = $img->encode('data-url');;
+                $wantedHairstyle->user_id = Auth::user()->id;
+                $wantedHairstyle->save();
+                $hairstyle_id = $wantedHairstyle->id;
             }
         //sa id-em upisi sve u assignments
         $assg = new Assignment;
             $assg->customer_id = Auth::user()->id;
             $assg->job_id = $job_id;
-            $assg->start_at = $time;
+            $assg->start_at = $start_n;
             $assg->confirmed = 0;
-            $assg->wanted_hairstyle_id = null;
-            $working_day = WorkingDay::where('user_id', $request->hairdresser)->where('from', "<=", $time)->where('until', ">=", $time)->first();
+            $assg->wanted_hairstyle_id = $hairstyle_id;
+            $working_day = WorkingDay::where('user_id', $request->hairdresser)->where('from', "<=", $start_n)->where('until', ">=", $start_n)->first();
             $assg->working_day_id = $working_day->id;
             $assg->save();
         } else {
