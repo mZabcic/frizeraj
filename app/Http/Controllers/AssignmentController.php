@@ -12,8 +12,9 @@ use App\WantedHairstyle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Validator;
 
-class HomeController extends Controller
+class AssignmentController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -118,7 +119,32 @@ class HomeController extends Controller
     }
     public function rezervacijaTermina(Request $request)
     {
-        //TODO: verifikator
+        //TODO: validator
+        $data = $request->all();
+
+        $messages = [
+           'required'    => 'Polje :attribute je obavezno!',
+           'max'    => 'Polje :attribute ne smije biti veće od :size znaka.',
+           'between' => 'Polje :attribute mora biti između :min - :max.',
+           'digits_between' => 'Polje :attribute mora biti između :min - :max.',
+            'min' => 'Polje :attribute mora biti veće od 6 znakova.',
+            'numeric' => 'Polje :attribute se mora sastojati samo od brojeva.',
+            'unique' => 'Već postoji korisnik s tom email adresom'
+        ];
+        $validator = Validator::make($data, [
+                   'time' => 'required|numeric',
+                   'job' => 'required|exists:jobs,id',
+                   'hairdresser' => 'required|exists:users,id',
+                   'hairstyle' => 'mimes:jpeg,jpg,png'
+               ], $messages);
+
+        if ($validator->fails()) {
+            return redirect('termin')
+                               ->withErrors($validator)
+                               ->withInput();
+        }
+
+
         //provjeri jos jednom jel termin zauzet (krug od 1h)
         $slobodno = true;
         $start_n = Carbon::createFromTimestamp($request->time);
@@ -128,13 +154,15 @@ class HomeController extends Controller
         $time_end2 = clone $start_n;
         $end_n = clone $start_n;
         $end_n->addMinutes($job->duration_in_minutes);
+        $hairdresser_id = $request->hairdresser;
+        $working_days = WorkingDay::where('user_id',$hairdresser_id)->get()->pluck('id')->all();
         //usporedit startna vremena termina da se ne preklapaju sa novim terminom
-        $assignments = Assignment::where('start_at', ">=", $start_n)->where('start_at', '<', $end_n);
+        $assignments = Assignment::where('start_at', ">=", $start_n)->where('start_at', '<', $end_n)->whereIn("working_day_id",$working_days);
         //return $assignments->get();
         if ($assignments->count()>0) {
             $slobodno = false;
         }
-        $assignments = Assignment::where('start_at', ">=", $time_start2->addHours(-1))->where('start_at', '<', $time_end2->addHours(1))->get();
+        $assignments = Assignment::where('start_at', ">=", $time_start2->addHours(-1))->where('start_at', '<', $time_end2->addHours(1))->whereIn("working_day_id",$working_days)->get();
 
         foreach ($assignments as $assg) {
             $start = $assg->start_at;
@@ -163,7 +191,7 @@ class HomeController extends Controller
                     $constraint->aspectRatio();
                 });
                 $wantedHairstyle = new wantedHairstyle;
-                $wantedHairstyle->picture = $img->encode('data-url');;
+                $wantedHairstyle->picture = $img->encode('data-url');
                 $wantedHairstyle->user_id = Auth::user()->id;
                 $wantedHairstyle->save();
                 $hairstyle_id = $wantedHairstyle->id;
@@ -178,8 +206,9 @@ class HomeController extends Controller
             $working_day = WorkingDay::where('user_id', $request->hairdresser)->where('from', "<=", $start_n)->where('until', ">=", $start_n)->first();
             $assg->working_day_id = $working_day->id;
             $assg->save();
+            return redirect('/termini')->with('message',"Rezervirali ste termin");
         } else {
-            echo "termin zauzet";
+            return redirect('/termini')->with('greska',"Termin zauzet");
         }
     }
 }

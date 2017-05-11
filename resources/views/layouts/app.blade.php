@@ -75,6 +75,8 @@
     <li><a class="admin-menu" href="/admin/frizeri"><span class="icon is-small"><i class="fa fa-scissors"></i></span>Frizeri</a></li>
     <li><a class="admin-menu" href="/admin/administratori"><span class="icon is-small"><i class="fa fa-cogs"></i></span>Administratori</a></li>
     <li><a class="admin-menu" href="/admin/korisnici/novi"><span class="icon is-small"><i class="fa fa-user-plus"></i></span>Novi korisnik</a></li>
+    <li><a class="admin-menu" href="/admin/poslovi"><span class="icon is-small"><i class="fa fa-tasks"></i></span>Poslovi</a></li>
+    <li><a class="admin-menu" href="/admin/posao/dodaj"><span class="icon is-small"><i class="fa fa-file"></i></span>Novi posao</a></li>
   </ul>
 </div>
 @endif
