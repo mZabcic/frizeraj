@@ -39,7 +39,9 @@ class HomeController extends Controller
       //3. dohvatit duration od job_id-a od svakog od termina
       //napravit varijablu tipa [start , start_termina1], [endtermina1, startermina2]....[endterminaN, end]
 
-
+      if (!Auth::user()->hasRole('customer') & !Auth::user()->hasRole('hairdresser')) {
+          return redirect('/');
+      }
       //za iduca 2 tjedna
       if (Auth::user()->hasRole('customer')) {
           $working_days = WorkingDay::where('from', ">=", Carbon::now()->addHours(-12))->where("from", "<=", Carbon::now()->addHours(-12)->addWeeks(2))->get();
@@ -116,8 +118,7 @@ class HomeController extends Controller
     }
     public function rezervacijaTermina(Request $request)
     {
-        //TODO: verifikator, sliku kompresat i spremit u bazu!
-        //TODO: fixat kod za termine
+        //TODO: verifikator
         //provjeri jos jednom jel termin zauzet (krug od 1h)
         $slobodno = true;
         $start_n = Carbon::createFromTimestamp($request->time);

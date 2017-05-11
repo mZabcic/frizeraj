@@ -33,7 +33,6 @@
       </a>
       <a class="nav-item is-tab is-hidden-mobile" href="/">Naslovna</a>
       <a class="nav-item is-tab is-hidden-mobile">Cjenik</a>
-     <a class="nav-item is-tab is-hidden-mobile">O nama</a>
     </div>
     <span class="nav-toggle">
       <span></span>
@@ -43,7 +42,6 @@
     <div class="nav-right nav-menu">
       <a class="nav-item is-tab is-hidden-tablet">Naslovna</a>
       <a class="nav-item is-tab is-hidden-tablet">Cjenik</a>
-      <a class="nav-item is-tab is-hidden-tablet">O nama</a>
           @if (!Auth::guest())
           @if (Auth::user()->isAdmin())
              <a id="admin-control" class="nav-item is-tab" href="/admin">Admin</a>
@@ -53,7 +51,9 @@
                             <a class="nav-item is-tab" href="/login">Prijava</a>
                             <a class="nav-item is-tab" href="/register">Registracija</a>
         @else
+        @if (!Auth::user()->isAdmin())
           <a class="nav-item is-tab" href="{{ route('termini') }}">Termini</a>
+        @endif
              <a class="nav-item is-tab" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
