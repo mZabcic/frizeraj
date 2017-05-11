@@ -1,11 +1,35 @@
 $( document ).ready(function() {
     var location = window.location.pathname;
+    if (location.includes('admin') ) {
+            $('#admin-control').addClass('is-active');
+            $('.admin-menu').each(function(){
+                if ($(this).attr('href') == location) {
+                    $(this).parent().addClass('is-active'); 
+                } else {
+                    $(this).parent().removeClass('is-active'); 
+                }
+            })
+        };
     $('.nav-item.is-active').removeClass('is.active');
     $('.nav-item').each(function(){
         if ($(this).attr('href') == location) {
             $(this).addClass('is-active');
         };
     })
+});
+
+
+$( document ).ready(function() {
+    if ($('#Rola').val() !== undefined){
+    if ($('#Rola').val().length == 0) {
+        $('#Rola').val($('#uloga').val());
+    } else {
+        $('#uloga').val($('#Rola').val())
+    }
+    }
+   $('#uloga').on('change', function() {
+       $('#Rola').val($('#uloga').val());
+   });
 });
 
 
@@ -33,6 +57,17 @@ $( document ).ready(function() {
     });
     $('#app_errors').each(function(){
          toastr["error"]($(this).val());
-    })
+    });
+
 });
+
+
+confirmDelete = function(id) {
+    var r = confirm("Jeste li sigurni da želite obrisati korisnika?");
+    if (r == true) {
+        document.getElementById(id).submit();
+    } else {
+        toastr["error"]('Morate potvrditi brisanje!');
+    }
+}
 //# sourceMappingURL=all.js.map

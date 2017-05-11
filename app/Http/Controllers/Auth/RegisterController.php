@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Carbon\Carbon;
 
 class RegisterController extends Controller
 {
@@ -27,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/termini';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -70,7 +71,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return User
      */
-    protected function create(array $data)
+    protected function create(array $data) 
     {
         return User::create([
             'first_name' => $data['Ime'],
@@ -78,7 +79,9 @@ class RegisterController extends Controller
             'email' => $data['Email'],
             'password' => bcrypt($data['Lozinka']),
             'role' => 1,
-            'favorite_hairdresser' => null
+            'favorite_hairdresser' => null,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
     }
 }
