@@ -32,7 +32,7 @@
         <img src="/img/logo.png" alt="Logo">
       </a>
       <a class="nav-item is-tab is-hidden-mobile" href="/">Naslovna</a>
-      <a class="nav-item is-tab is-hidden-mobile">Cjenik</a>
+      <a class="nav-item is-tab is-hidden-mobile" href="/cjenik">Cjenik</a>
     </div>
     <span class="nav-toggle">
       <span></span>
@@ -41,7 +41,7 @@
     </span>
     <div class="nav-right nav-menu">
       <a class="nav-item is-tab is-hidden-tablet">Naslovna</a>
-      <a class="nav-item is-tab is-hidden-tablet">Cjenik</a>
+      <a class="nav-item is-tab is-hidden-tablet" href="/cjenik"">Cjenik</a>
           @if (!Auth::guest())
           @if (Auth::user()->isAdmin())
              <a id="admin-control" class="nav-item is-tab" href="/admin">Admin</a>
