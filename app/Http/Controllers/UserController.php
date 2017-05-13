@@ -21,7 +21,7 @@ class UserController extends Controller
     public function customers()
     {
         $numOf = User::with('roleNav')->where('role','=',1)->count();
-        $data = User::with('roleNav')->where('role','=',1)->paginate(13);
+        $data = User::with('roleNav')->where('role','=',1)->orderBy('last_name')->paginate(13);
         return view('admin.users')->with('data', $data)->with('count', $numOf);
     }
 
@@ -29,14 +29,14 @@ class UserController extends Controller
     public function hairdressers()
     {
         $numOf = User::with('roleNav')->where('role','=',2)->count();
-        $data = User::with('roleNav')->where('role','=',2)->paginate(13);
+        $data = User::with('roleNav')->where('role','=',2)->orderBy('last_name')->paginate(13);
         return view('admin.hairdressers')->with('data', $data)->with('count', $numOf);
     }
 
      public function admins()
     {
         $numOf = User::with('roleNav')->where('role','=',3)->count();
-        $data = User::with('roleNav')->where('role','=',3)->paginate(13);
+        $data = User::with('roleNav')->where('role','=',3)->orderBy('last_name')->paginate(13);
         return view('admin.admins')->with('data', $data)->with('count', $numOf);
     }
 
@@ -153,7 +153,56 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-        
+          $data = $request->all();
+
+        $messages = [
+    'required'    => 'Polje :attribute je obavezno!',
+    'max'    => 'Polje :attribute ne smije biti veće od :size znaka.',
+    'between' => 'Polje :attribute mora biti između :min - :max.',
+    'email'      => 'Polje :attribute mora imati format email-a.',
+    'confirmed' => 'Polje :attribute mora biti potvrđena.',
+     'min' => 'Polje :attribute mora biti veće od 6 znakova.',
+     'unique' => 'Već postoji korisnik s tom email adresom'
+];
+        $validator = Validator::make($data, [
+            'Ime' => 'required|max:255',
+            'Prezime' => 'required|max:255',
+            'Email' => 'required|email|max:255'
+        ], $messages);
+
+         if ($validator->fails()) {
+            return redirect('admin/korisnici/' . $data['Id'] .'/uredi')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+  try {
+        $user = User::where('id','=',$data['Id'])->first();
+        $test = User::where([['email','=',$data['Email']],  ['id', '<>', $data['Id']],])->count();
+        if ($test > 0) {
+             return redirect('admin/korisnici/' . $data['Id'] .'/uredi')
+                        ->with('greska', 'Korisnik s emailom ' . $data['Email'] .' već postoji')
+                        ->withInput();
+        }
+        $user->first_name =  $data['Ime'];
+        $user->last_name =  $data['Prezime'];
+        $user->email =  $data['Email'];
+        $user->role =  $data['Rola'];
+        $user->save();
+  }  catch (Exception $e) {
+            return redirect()->back()->with('greska', 'Nije moguće urediti zapis!');
+        } 
+           if ($data['Rola'] == 1) {
+    return redirect('admin/korisnici')
+                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je uređen s ulogom Korisnik' );
+    } else if ($data['Rola'] == 2 ){
+        return redirect('admin/frizeri')
+                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je uređen s ulogom Frizer' );
+    } else {
+        return redirect('admin/administratori')
+                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je uređen s ulogom Administrator');
+    }
+
+
     }
 
     /**

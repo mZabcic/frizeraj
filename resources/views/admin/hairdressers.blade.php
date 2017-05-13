@@ -9,6 +9,7 @@
       <th>Email adresa</th>
       
       <th></th>
+       <th></th>
     </tr>
   </thead>
   <tbody>
@@ -23,7 +24,7 @@
         <td>
           {{$user->email}}
         </td>
-        <td>
+        <td  style="text-align: end;">
           <form id="{{$user->id}}" action="/admin/korisnici/{{$user->id}}/delete" method="post">
             {{ method_field('DELETE') }}
             {{ csrf_field() }}
@@ -35,6 +36,14 @@
   </a>
            </form>
            </td>
+           <td>
+            <a class="button is-info is-outlined" href="/admin/korisnici/{{$user->id}}/uredi">
+    <span>Uredi</span>
+    <span class="icon is-small">
+      <i class="fa fa-pencil-square-o"></i>
+    </span>
+  </a>
+        </td>
     </tr>
     @endforeach
   </tbody>

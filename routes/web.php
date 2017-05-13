@@ -43,6 +43,7 @@ Route::get('/admin/korisnici/novi', function () {
 })->middleware('role:admin');
 
 Route::delete('/admin/korisnici/{id}/delete', 'UserController@delete')->middleware('role:admin');
+Route::post('/admin/korisnici/update', 'UserController@update')->middleware('role:admin');
 
 
 //misc stvari za admina

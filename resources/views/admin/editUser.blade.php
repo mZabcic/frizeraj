@@ -5,7 +5,21 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Uredi korisnika</div>
+                <div class="panel-heading">
+                <div class="columns">
+                <div class="column is-11">
+                    Uredi korisnika  
+                </div>
+                <div class="column is-1">
+                 <a style="margin-top:7px;" class="button is-outlined" onclick="history.go(-1);">
+ 
+    <span class="icon is-small">
+      <i class="fa fa-times"></i>
+    </span>
+  </a>
+  </div>
+                </div>
+                </div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="/admin/korisnici/update">
                         {{ csrf_field() }}
@@ -70,15 +84,19 @@
                                 <input id="Rola" type="hidden" class="form-control" name="Rola" value="{{$user->role}}">
                                 </span>
                             </div>
-                        </div>
-
+                      
+                              <input id="Id" type="hidden" class="form-control" name="Id" value="{{$user->id}}">
                         <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
+                            <div style="margin-top:10px;"  class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
                                    Spremi promjene
                                 </button>
                             </div>
                         </div>
+                        
+                     
+                        
+
                     </form>
                 </div>
             </div>
