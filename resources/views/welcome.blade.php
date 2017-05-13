@@ -1,22 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="hero-body is-primary is-bold">
-    <!--Zaglavlje -->
-    <!--
-                Ovdje nadodati uvjete da se prikazuje ovisno o tom je li korisnik, gost ili admin.
 
-            -->
 
-    <div class="hero-head">
-        <br />
-        <br />
-        <br />
-        <h1 class="title is-1" style="text-align:center">Frizerski salon FER</h1>
-    </div>
+            @if (!Auth::guest())
+            @if (!Auth::user()->isAdmin())
+              </br>
+              </br>
+            @endif
+            @endif
+            @if (Auth::guest())
+              </br>
+              </br>
+            @endif
+            <h1 class="title is-1" style="text-align:center">Frizerski salon FER</h1>
+            </br>
+            </br>
+            @if (!Auth::guest())
+            @if (!Auth::user()->isAdmin())
+              </br>
+            @endif
+            @endif
+            @if (Auth::guest())
+              </br>
+            @endif
 
-    <!-- Sredina -->
-    <div class="hero-body">
+
             <div class="tile is-ancestor is-vertical">
                 <div class="is-parent tile">
                     <div class="is-child tile is-2">
@@ -47,13 +56,7 @@
                     </div>
                 </div>
             </div>
-     </div>
 
-    <!-- Kraj -->
-    <div class="hero-foot">
-
-    </div>
-</section>
 
 <script>
     function myMap() {

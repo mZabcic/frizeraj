@@ -20,6 +20,10 @@ Route::get('/home', function () {
 });
 
 Auth::routes();
+
+//cjenik
+ROUTE::get('/cjenik', 'HomeController@cjenik')->name('cjenik');
+
 //termini
 Route::get('/termini', 'AssignmentController@termini')->name('termini');
 Route::get('/korisnici', 'UserController@index')->middleware('role:admin');
