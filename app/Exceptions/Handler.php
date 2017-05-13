@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -42,11 +43,14 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+  public function render($request, Exception $e)
+{
+    if($e instanceof NotFoundHttpException)
     {
-        return parent::render($request, $exception);
+        return response()->view('missing', [], 404);
     }
-
+    return parent::render($request, $e);
+}
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
