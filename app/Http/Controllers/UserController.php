@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 
+
 class UserController extends Controller
 {
     /**
@@ -133,9 +134,14 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($id)
     {
-        //
+         try {
+        $user = User::where('id','=',$id)->first();
+        } catch (Exception $e) {
+            return redirect()->back()->with('greska', 'Nije moguće uredit zapis!');
+        } 
+        return view('admin.editUser')->with('user', $user);
     }
 
     /**
@@ -145,9 +151,9 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
-        //
+        
     }
 
     /**

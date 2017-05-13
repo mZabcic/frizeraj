@@ -33,7 +33,16 @@
     </span>
   </a>
            </form>
+           </td>
+           <td>
+            <a class="button is-danger is-outlined" href="/admin/korisnici/{{$user->id}}/uredi">
+    <span>Delete</span>
+    <span class="icon is-small">
+      <i class="fa fa-times"></i>
+    </span>
+  </a>
         </td>
+        
     </tr>
     @endforeach
   </tbody>

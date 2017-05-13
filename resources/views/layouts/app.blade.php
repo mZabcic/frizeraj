@@ -52,7 +52,7 @@
                             <a class="nav-item is-tab" href="/register">Registracija</a>
         @else
         @if (!Auth::user()->isAdmin())
-          <a class="nav-item is-tab" href="{{ route('termini') }}">Termini</a>
+          <a class="nav-item is-tab" href="/termini">Termini</a>
         @endif
              <a class="nav-item is-tab" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

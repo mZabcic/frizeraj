@@ -43,6 +43,7 @@ Route::delete('/admin/korisnici/{id}/delete', 'UserController@delete')->middlewa
 
 //misc stvari za admina
 Route::get('/admin/poslovi', 'AdminJobsController@poslovi')->middleware('role:admin');
+Route::get('/admin/korisnici/{id}/uredi', 'UserController@edit')->middleware('role:admin');
 Route::get('/admin/posao/dodaj', 'AdminJobsController@dodajPosao')->middleware('role:admin');
 Route::post('/admin/posao/dodaj', 'AdminJobsController@upisiPosao')->middleware('role:admin');
 Route::delete('/admin/posao/{id}/obrisi', 'AdminJobsController@obrisiPosao')->middleware('role:admin');
