@@ -19,9 +19,9 @@
           <table class="table box" style="height:275px;">
             <thead>
               <tr>
-                <th>Dan</th>
-                <th>Od</th>
-                <th>Do</th>
+                <th style="width:40%;">Dan</th>
+                <th style="width:30%;">Od</th>
+                <th style="width:30%;">Do</th>
 
                 <th></th>
               </tr>
@@ -112,6 +112,8 @@
   position: relative;
   padding: 0;
   text-shadow: 0px 1px 0 #a2a2a2;
+}th, td{
+  text-align: center !important;
 }
   .star-ratings-css-top {
     color: #e7711b;
