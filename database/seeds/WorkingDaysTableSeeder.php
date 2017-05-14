@@ -15,11 +15,11 @@ class WorkingDaysTableSeeder extends Seeder
     {
         $users = User::where('role', 2)->get();
         $now = Carbon::now();
-        $date = Carbon::createFromDate(intval($now->format('Y')), intval($now->format('m')), intval($now->format('d')));
+        $date = Carbon::Create(intval($now->format('Y')), intval($now->format('m')), intval($now->format('d')),0,0,0);
         $date_from = clone $date;
         $date_to = clone $date;
-        $date_from->addHours(19);
-        $date_to->addHours(27);
+        $date_from->addHours(8);
+        $date_to->addHours(16);
         for ($i=0; $i<14; $i++) {
             $dateFrom = $date_from->toDateTimeString();
             $dateTo = $date_to->toDateTimeString();

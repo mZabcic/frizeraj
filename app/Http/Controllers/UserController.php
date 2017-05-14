@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-
-
+use App\WorkingDay;
 
 class UserController extends Controller
 {
@@ -20,23 +19,23 @@ class UserController extends Controller
      */
     public function customers()
     {
-        $numOf = User::with('roleNav')->where('role','=',1)->count();
-        $data = User::with('roleNav')->where('role','=',1)->orderBy('last_name')->paginate(13);
+        $numOf = User::with('roleNav')->where('role', '=', 1)->count();
+        $data = User::with('roleNav')->where('role', '=', 1)->orderBy('last_name')->paginate(13);
         return view('admin.users')->with('data', $data)->with('count', $numOf);
     }
 
 
     public function hairdressers()
     {
-        $numOf = User::with('roleNav')->where('role','=',2)->count();
-        $data = User::with('roleNav')->where('role','=',2)->orderBy('last_name')->paginate(13);
+        $numOf = User::with('roleNav')->where('role', '=', 2)->count();
+        $data = User::with('roleNav')->where('role', '=', 2)->orderBy('last_name')->paginate(13);
         return view('admin.hairdressers')->with('data', $data)->with('count', $numOf);
     }
 
-     public function admins()
+    public function admins()
     {
-        $numOf = User::with('roleNav')->where('role','=',3)->count();
-        $data = User::with('roleNav')->where('role','=',3)->orderBy('last_name')->paginate(13);
+        $numOf = User::with('roleNav')->where('role', '=', 3)->count();
+        $data = User::with('roleNav')->where('role', '=', 3)->orderBy('last_name')->paginate(13);
         return view('admin.admins')->with('data', $data)->with('count', $numOf);
     }
 
@@ -50,7 +49,6 @@ class UserController extends Controller
      //POST
     public function create(Request $request)
     {
-
         $data = $request->all();
 
         $messages = [
@@ -69,14 +67,14 @@ class UserController extends Controller
             'Lozinka' => 'required|min:6|confirmed',
         ], $messages);
 
-         if ($validator->fails()) {
+        if ($validator->fails()) {
             return redirect('admin/korisnici/novi')
                         ->withErrors($validator)
                         ->withInput();
         }
 
-   try {
-        User::create([
+        try {
+            User::create([
             'first_name' => $data['Ime'],
             'last_name' => $data['Prezime'],
             'email' => $data['Email'],
@@ -86,24 +84,21 @@ class UserController extends Controller
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
-   } catch (Exception $e) {
-       return redirect('admin/korisnici/novi')
+        } catch (Exception $e) {
+            return redirect('admin/korisnici/novi')
                         ->with('greska', 'Greška s bazom podataka')
                         ->withInput();
-    }
-    if ($data['Rola'] == 1) {
-    return redirect('admin/korisnici')
-                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je dodan s ulogom Korisnik' );
-    } else if ($data['Rola'] == 2 ){
-        return redirect('admin/frizeri')
-                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je dodan s ulogom Frizer' );
-    } else {
-        return redirect('admin/administratori')
+        }
+        if ($data['Rola'] == 1) {
+            return redirect('admin/korisnici')
+                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je dodan s ulogom Korisnik');
+        } elseif ($data['Rola'] == 2) {
+            return redirect('admin/frizeri')
+                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je dodan s ulogom Frizer');
+        } else {
+            return redirect('admin/administratori')
                         ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je dodan s ulogom Administrator');
-    }
-                     
-
-
+        }
     }
 
     /**
@@ -136,11 +131,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-         try {
-        $user = User::where('id','=',$id)->first();
+        try {
+            $user = User::where('id', '=', $id)->first();
         } catch (Exception $e) {
             return redirect()->back()->with('greska', 'Nije moguće uredit zapis!');
-        } 
+        }
         return view('admin.editUser')->with('user', $user);
     }
 
@@ -153,7 +148,7 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-          $data = $request->all();
+        $data = $request->all();
 
         $messages = [
     'required'    => 'Polje :attribute je obavezno!',
@@ -170,39 +165,37 @@ class UserController extends Controller
             'Email' => 'required|email|max:255'
         ], $messages);
 
-         if ($validator->fails()) {
+        if ($validator->fails()) {
             return redirect('admin/korisnici/' . $data['Id'] .'/uredi')
                         ->withErrors($validator)
                         ->withInput();
         }
-  try {
-        $user = User::where('id','=',$data['Id'])->first();
-        $test = User::where([['email','=',$data['Email']],  ['id', '<>', $data['Id']],])->count();
-        if ($test > 0) {
-             return redirect('admin/korisnici/' . $data['Id'] .'/uredi')
+        try {
+            $user = User::where('id', '=', $data['Id'])->first();
+            $test = User::where([['email','=',$data['Email']],  ['id', '<>', $data['Id']],])->count();
+            if ($test > 0) {
+                return redirect('admin/korisnici/' . $data['Id'] .'/uredi')
                         ->with('greska', 'Korisnik s emailom ' . $data['Email'] .' već postoji')
                         ->withInput();
-        }
-        $user->first_name =  $data['Ime'];
-        $user->last_name =  $data['Prezime'];
-        $user->email =  $data['Email'];
-        $user->role =  $data['Rola'];
-        $user->save();
-  }  catch (Exception $e) {
+            }
+            $user->first_name =  $data['Ime'];
+            $user->last_name =  $data['Prezime'];
+            $user->email =  $data['Email'];
+            $user->role =  $data['Rola'];
+            $user->save();
+        } catch (Exception $e) {
             return redirect()->back()->with('greska', 'Nije moguće urediti zapis!');
-        } 
-           if ($data['Rola'] == 1) {
-    return redirect('admin/korisnici')
-                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je uređen s ulogom Korisnik' );
-    } else if ($data['Rola'] == 2 ){
-        return redirect('admin/frizeri')
-                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je uređen s ulogom Frizer' );
-    } else {
-        return redirect('admin/administratori')
+        }
+        if ($data['Rola'] == 1) {
+            return redirect('admin/korisnici')
+                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je uređen s ulogom Korisnik');
+        } elseif ($data['Rola'] == 2) {
+            return redirect('admin/frizeri')
+                        ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je uređen s ulogom Frizer');
+        } else {
+            return redirect('admin/administratori')
                         ->with('message', 'Korisnik ' . $data['Ime'] . ' ' . $data['Prezime'] . ' je uređen s ulogom Administrator');
-    }
-
-
+        }
     }
 
     /**
@@ -214,10 +207,52 @@ class UserController extends Controller
     public function delete($id)
     {
         try {
-        User::where('id','=',$id)->delete();
+            User::where('id', '=', $id)->delete();
         } catch (Exception $e) {
             return redirect()->back()->with('greska', 'Nije moguće obrisati zapis!');
-        } 
+        }
         return redirect()->back()->with('message', 'Korisnik je uspješno obrisan.');
+    }
+
+    public function radnoVrijeme($id)
+    {
+        $hairdresser = User::where('id', $id)->first();
+        if ($hairdresser->hasRole('hairdresser')) {
+            $working_days = WorkingDay::where('user_id', $id)->where("until", ">=", Carbon::now())->orderBy('from')->get();
+            return view('admin/editWorkingDays')->with('working_days', $working_days)->with('user', $hairdresser);
+            //return $working_days;
+        }
+        return back();
+    }
+
+    public function promijeniRadnoVrijeme($id, Request $request){
+      $user_id = $id;
+      $days = [];
+      for($i=0;$i<count($request->from);$i++){
+          $day = new \stdClass;
+          $day->id = $request->id[$i];
+          $day->from = Carbon::createFromFormat('m/d/Y h:i A',$request->from[$i]);
+          $day->until = Carbon::createFromFormat('m/d/Y h:i A', $request->until[$i]);
+          array_push($days, $day);
+      }
+      $ids = array_column($days,'id');
+      //obrisimo nepotrebne working dayse
+      $working_days = WorkingDay::where('user_id', $user_id)->where('until',">=",Carbon::now())->whereNotIn('id',$ids)->delete();
+      //upisimo nove working dayse
+      foreach($days as $day){
+        if($day->id == 0){
+          $working_day = new WorkingDay;
+          $working_day->from = $day->from;
+          $working_day->until = $day->until;
+          $working_day->user_id = $user_id;
+          $working_day->save();
+        }else{
+          $working_day = WorkingDay::where('id', $day->id)->first();
+          $working_day->from = $day->from;
+          $working_day->until = $day->until;
+          $working_day->save();
+        }
+      }
+      return redirect('/admin/frizeri')->with('message',"Radno vrijeme promjenjeno.");
     }
 }

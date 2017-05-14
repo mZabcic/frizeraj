@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('scripts')
+<script src="/js/script.js" type="text/javascript"></script>
+@endsection
 @section('content')
 <div class="container" style="margin-top:50px; margin-bottom:50px;">
   <div class="columns">

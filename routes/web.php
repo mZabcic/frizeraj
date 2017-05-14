@@ -23,8 +23,13 @@ Auth::routes();
 
 //basic tabovi
 ROUTE::get('/cjenik', 'HomeController@cjenik')->name('cjenik');
+
+//frizeri
 ROUTE::get('/frizeri', 'HomeController@frizeri')->name('frizeri');
 ROUTE::get('/frizer/{id}', 'HomeController@frizer')->name('frizer');
+ROUTE::post('/frizer/{id}/omiljeni', 'HomeController@omiljeniFrizer')->name('omiljeniFrizer');
+
+
 //termini
 Route::get('/termini', 'AssignmentController@termini')->name('termini');
 Route::get('/korisnici', 'UserController@index')->middleware('role:admin');
@@ -53,3 +58,6 @@ Route::get('/admin/korisnici/{id}/uredi', 'UserController@edit')->middleware('ro
 Route::get('/admin/posao/dodaj', 'AdminJobsController@dodajPosao')->middleware('role:admin');
 Route::post('/admin/posao/dodaj', 'AdminJobsController@upisiPosao')->middleware('role:admin');
 Route::delete('/admin/posao/{id}/obrisi', 'AdminJobsController@obrisiPosao')->middleware('role:admin');
+
+Route::get('/admin/frizer/{id}/vrijeme', 'UserController@radnoVrijeme')->middleware('role:admin');
+Route::post('/admin/frizer/{id}/vrijeme', 'UserController@promijeniRadnoVrijeme')->middleware('role:admin')->name('promijeniRadnoVrijeme');

@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 <table class="table">
   <thead>
@@ -7,7 +6,7 @@
       <th>Ime</th>
       <th>Prezime</th>
       <th>Email adresa</th>
-      
+
       <th></th>
        <th></th>
     </tr>
@@ -44,6 +43,14 @@
     </span>
   </a>
         </td>
+        <td>
+         <a class="button is-info is-outlined" href="/admin/frizer/{{$user->id}}/vrijeme">
+ <span>Promijeni radno vrijeme</span>
+ <span class="icon is-small">
+   <i class="fa fa-pencil-square-o"></i>
+ </span>
+</a>
+     </td>
     </tr>
     @endforeach
   </tbody>
