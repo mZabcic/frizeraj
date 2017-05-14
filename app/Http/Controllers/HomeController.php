@@ -27,9 +27,15 @@ class HomeController extends Controller
         return view('cjenik')->with('jobs', $jobs);
     }
 
-    public function frizeri()
-    {
+    public function frizeri(){
+      $numOf = User::with('roleNav')->where('role','=',2)->count();
+      $data = User::with('roleNav')->where('role','=',2)->orderBy('last_name')->paginate(13);
+      $working_days = WorkingDay::where('until',">=",Carbon::now())->get();
+      //return $data[0]->working_days;
+      return view('frizeri')->with('data', $data)->with('count', $numOf)->with("working_days",$working_days);
     }
+
+
     public function omiljeniFrizer($id, Request $request)
     {
       if(Auth::guest())
