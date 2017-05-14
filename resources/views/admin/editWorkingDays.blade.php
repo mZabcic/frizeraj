@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('styles')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css" />
-<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="/css/style.css" />
 @endsection
 @section('scripts')
 <script src='{{ asset('fullcalendar/lib/moment.min.js') }}'></script>
@@ -44,7 +44,7 @@
                                   <div align="center">
                                 <div align="center" style="width:200px;">
 
-                                        <div class='input-group date inline datetimepicker'>
+                                        <div class='input-group date  datetimepicker'>
                                             <input type='text' class="form-control" name="from[]" value="{{$working_day->from->format('m/d/Y h:i A')}}" />
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -56,9 +56,9 @@
                               </td>
                           <td style="height:60px;">
                             <div align="center">
-                                <div class="inline" style="width:200px;">
+                                <div class="" style="width:200px;">
 
-                                        <div class='input-group date inline datetimepicker'>
+                                        <div class='input-group date  datetimepicker'>
                                             <input type='text' class="form-control" name="until[]" value="{{$working_day->until->format('m/d/Y h:i A')}}" />
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -115,7 +115,7 @@ function dodaj(){
   var table = document.getElementById("wd-table");
   var tr = document.createElement("tr");
   tr.id = "tr"+rm_id;
-  tr.innerHTML = '<td><div align="center"><div align="center" style="width:200px;"><div class=\'input-group date inline datetimepicker\'><input type=\'text\' class="form-control" name="from[]" value="" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div></td><td style="height:60px;"><div align="center"><div class="inline" style="width:200px;"><div class=\'input-group date inline datetimepicker\'><input type=\'text\' class="form-control" name="until[]" value="" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div></td><td><button class="btn btn-default" type="button" onclick="document.getElementById(\'tr'+rm_id+'\').parentNode.removeChild(document.getElementById(\'tr'+rm_id+'\'));"><i class="fa fa-trash-o" style="font-size:20px;"></i></button></td></div></div><input name="id[]" type="hidden" value="0" />';
+  tr.innerHTML = '<td><div align="center"><div align="center" style="width:200px;"><div class=\'input-group date  datetimepicker\'><input type=\'text\' class="form-control" name="from[]" value="" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div></td><td style="height:60px;"><div align="center"><div class="" style="width:200px;"><div class=\'input-group date  datetimepicker\'><input type=\'text\' class="form-control" name="until[]" value="" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div></td><td><button class="btn btn-default" type="button" onclick="document.getElementById(\'tr'+rm_id+'\').parentNode.removeChild(document.getElementById(\'tr'+rm_id+'\'));"><i class="fa fa-trash-o" style="font-size:20px;"></i></button></td></div></div><input name="id[]" type="hidden" value="0" />';
   table.appendChild(tr);
   $(function () {$('.datetimepicker').each(function(index){$(this).datetimepicker();});})
 }
