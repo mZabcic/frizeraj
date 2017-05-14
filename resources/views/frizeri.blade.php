@@ -90,8 +90,8 @@
 	  display: block;
     text-align: center;
     background: #ed2553;
-    border-radius: 3px;
-    box-shadow: 0 10px 20px -8px rgb(240, 75, 113);
+    border-radius: 6px;
+    /* box-shadow: 0 10px 20px -8px rgb(240, 75, 113); */
     padding: 10px 17px;
     font-size: 18px;
     cursor: pointer;
@@ -107,6 +107,7 @@
 }
 .like-content .btn-secondary .fa {
 
+}.like-review button{
 }
 .animate-like {
 	animation-name: likeAnimation;
@@ -129,9 +130,7 @@ $(function(){
 		$(this).children('.fa-heart').addClass('animate-like');
 	});
 });
-</script>
 
-<script>
 /*STAR RATING */
   var ids = {!! $data->pluck('id') !!};
   $(function () {
@@ -140,7 +139,6 @@ $(function(){
         rating: 3.6,
         fullStar: true
       });
-      console.log(i);
   }
 
   });
