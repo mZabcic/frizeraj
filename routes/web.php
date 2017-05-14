@@ -21,9 +21,10 @@ Route::get('/home', function () {
 
 Auth::routes();
 
-//cjenik
+//basic tabovi
 ROUTE::get('/cjenik', 'HomeController@cjenik')->name('cjenik');
-
+ROUTE::get('/frizeri', 'HomeController@frizeri')->name('frizeri');
+ROUTE::get('/frizer/{id}', 'HomeController@frizer')->name('frizer');
 //termini
 Route::get('/termini', 'AssignmentController@termini')->name('termini');
 Route::get('/korisnici', 'UserController@index')->middleware('role:admin');
