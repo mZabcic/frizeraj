@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('scripts')
+<script src="/js/script.js"></script>
+@endsection
 @section('content')
 
 <script type="text/javascript" src="{{ URL::asset('js/jquery.rateyo.js') }}"></script>
@@ -56,7 +58,7 @@
             <div class="card-footer-item">
               <div class="like-content">
                 @if(!Auth::guest())
-                <button class="btn-secondary like-review">
+                <button class="btn-secondary like-review" onclick="omiljeni({{$user->id}})">
                   <i class="fa fa-heart" aria-hidden="true"></i>
                 </button>
                 @endif
