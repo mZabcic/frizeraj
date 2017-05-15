@@ -33,6 +33,7 @@
       </a>
       <a class="nav-item is-tab is-hidden-mobile" href="/">Naslovna</a>
       <a class="nav-item is-tab is-hidden-mobile" href="/cjenik">Cjenik</a>
+      <a class="nav-item is-tab is-hidden-mobile" href="/frizeri">Frizeri</a>
     </div>
     <span class="nav-toggle">
       <span></span>
@@ -41,7 +42,8 @@
     </span>
     <div class="nav-right nav-menu">
       <a class="nav-item is-tab is-hidden-tablet">Naslovna</a>
-      <a class="nav-item is-tab is-hidden-tablet" href="/cjenik"">Cjenik</a>
+        <a class="nav-item is-tab is-hidden-tablet" href="/cjenik">Cjenik</a>
+      <a class="nav-item is-tab is-hidden-tablet" href="/frizeri">Frizeri</a>
           @if (!Auth::guest())
           @if (Auth::user()->isAdmin())
              <a id="admin-control" class="nav-item is-tab" href="/admin">Admin</a>
@@ -54,10 +56,11 @@
         @if (!Auth::user()->isAdmin())
           <a class="nav-item is-tab" href="/termini">Termini</a>
         @endif
+          <a class="nav-item is-tab" href="/promijeniLozinku">Promijeni Lozinku</a>
              <a class="nav-item is-tab" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                            Logout
+                                            Odjava
                                         </a>
 
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

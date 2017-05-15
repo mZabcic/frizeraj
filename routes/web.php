@@ -21,6 +21,9 @@ Route::get('/home', function () {
 
 Auth::routes();
 
+Route::post('/korisnik/postCredentials', 'UserController@postCredentials')->name('postLozinka');
+
+ROUTE::get('/promijeniLozinku','UserController@changePassword')->name('lozinka');
 //basic tabovi
 ROUTE::get('/cjenik', 'HomeController@cjenik')->name('cjenik');
 

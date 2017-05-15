@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\WorkingDay;
+use Auth;
+use Hash;
 
 class UserController extends Controller
 {
@@ -134,10 +136,72 @@ class UserController extends Controller
         try {
             $user = User::where('id', '=', $id)->first();
         } catch (Exception $e) {
+
             return redirect()->back()->with('greska', 'Nije moguće uredit zapis!');
         }
         return view('admin.editUser')->with('user', $user);
     }
+
+    public function changePassword()
+    {
+        try {
+            $user = Auth::user();
+        } catch (Exception $e) {
+            return redirect()->back()->with('greska', 'Nije moguće promijeniti lozinku!');
+        }
+        return view('changePassword')->with('user', $user);
+    }
+    public function postCredentials(Request $request)
+    {
+      if(Auth::Check())
+      {
+        $request_data = $request->All();
+        $validator = $this->admin_credential_rules($request_data);
+        if($validator->fails())
+        {
+          return redirect('/promijeniLozinku')->withErrors($validator)->withInput();
+        }
+        else
+        {
+          $current_password = Auth::User()->password;
+          if(Hash::check($request_data['current-password'], $current_password))
+          {
+            $user_id = Auth::User()->id;
+            $obj_user = User::find($user_id);
+            $obj_user->password = Hash::make($request_data['password']);;
+            $obj_user->save();
+            Auth::logout();
+            return redirect('/')->with('message', 'Lozinka uspješno promijenjena. Prijavite se ponovno s novom lozinkom.');
+          }
+          else
+          {
+            $error = array('current-password' => 'Trenutna lozinka nije ispravno unesena.');
+            return redirect('/promijeniLozinku')
+                        ->withErrors($error);
+          }
+        }
+      }
+      else
+      {
+        return redirect()->to('/');
+      }
+    }
+public function admin_credential_rules(array $data)
+{
+  $messages = [
+    'current-password.required' => 'Unesite trenutnu lozinku',
+    'password.required' => 'Unesite lozinku',
+    'password_confirmation.required' => 'Unesite lozinku',
+  ];
+
+  $validator = Validator::make($data, [
+    'current-password' => 'required',
+    'password' => 'required|same:password',
+    'password_confirmation' => 'required|same:password',
+  ], $messages);
+
+  return $validator;
+}
 
     /**
      * Update the specified resource in storage.

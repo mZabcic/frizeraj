@@ -16,7 +16,7 @@
           </header>
           <div class="card-content">
             <div class="content">
-              <h2 class="title is-4" style="text-align:center"><strong>RADNO VRIJEME:</strong></h2>
+              <h2 class="title is-5" style="text-align:center"><strong>RADNO VRIJEME:</strong></h2>
               <table class="table box" style="height:275px;">
                 <col width="150">
                 <col width="100">
@@ -55,9 +55,11 @@
           <footer class="card-footer">
             <div class="card-footer-item">
               <div class="like-content">
+                @if(!Auth::guest())
                 <button class="btn-secondary like-review">
                   <i class="fa fa-heart" aria-hidden="true"></i>
                 </button>
+                @endif
               </div>
             </div>
             <a class="card-footer-item">
@@ -86,13 +88,19 @@
     background-color: white;
 }
 /* LIKE BUTTON */
+.like-content {
+    width: 100%;
+    margin: 0px 0 0;
+    padding: 0px 0 0;
+}
 .like-content .btn-secondary {
-	  display: block;
+	  display: flex;
+	  margin: 0px auto 0px;
     text-align: center;
     background: #ed2553;
-    border-radius: 6px;
-    /* box-shadow: 0 10px 20px -8px rgb(240, 75, 113); */
-    padding: 10px 17px;
+    border-radius: 3px;
+    /*box-shadow: 0 10px 20px -8px rgb(240, 75, 113);*/
+    padding: 14px 20px;
     font-size: 18px;
     cursor: pointer;
     border: none;
@@ -106,8 +114,7 @@
 	  transform: translateY(-3px);
 }
 .like-content .btn-secondary .fa {
-
-}.like-review button{
+	  margin-right: 0px;
 }
 .animate-like {
 	animation-name: likeAnimation;
@@ -119,7 +126,6 @@
   0%   { transform: scale(30); }
   100% { transform: scale(1); }
 }
-
 </style>
 
 <script>
