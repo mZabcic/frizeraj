@@ -283,7 +283,7 @@ public function admin_credential_rules(array $data)
         $hairdresser = User::where('id', $id)->first();
         if ($hairdresser->hasRole('hairdresser')) {
             $working_days = WorkingDay::where('user_id', $id)->where("until", ">=", Carbon::now())->orderBy('from')->get();
-            return view('admin/editWorkingDays')->with('working_days', $working_days)->with('user', $hairdresser);
+            return view('/admin/editWorkingDays')->with('working_days', $working_days)->with('user', $hairdresser);
             //return $working_days;
         }
         return back();
