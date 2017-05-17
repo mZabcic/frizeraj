@@ -36,7 +36,7 @@
                           <table class="wd-table" id="wd-table">
                           <th style="text-align:center;"> Od </th>
                           <th style="text-align:center;"> Do </th>
-                        
+                        @if($working_days->count()  != 0)
                         @foreach($working_days as $key=>$working_day)
                         <tr id="tr{{$key}}">
 
@@ -85,13 +85,14 @@
                         </script>
                       </tr>
                         @endforeach
+                        @endif
                         </table>
                         <div class="form-group">
                         <button type="button" class="btn" onclick="dodaj()">
                            Dodaj radno vrijeme
                         </button>
                       </div>
-                              <input id="id" type="hidden" class="form-control" name="user_id" value="{{$working_days[0]->user_id}}">
+                              <input id="id" type="hidden" class="form-control" name="user_id" value="{{$user->id}}">
                         <div class="form-group">
                                 <button type="submit" class="btn btn-primary">
                                    Spremi promjene
@@ -110,7 +111,11 @@
 </div>
 
 <script>
+@if(isset($key))
 var rm_id={{$key}};
+@else
+var rm_id=0;
+@endif
 function dodaj(){
   rm_id++;
   var table = document.getElementById("wd-table");
