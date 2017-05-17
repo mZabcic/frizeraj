@@ -70,3 +70,31 @@ confirmDelete = function(id) {
         toastr["error"]('Morate potvrditi brisanje!');
     }
 }
+
+confirmDeleteTermin = function(id) {
+    var r = confirm("Jeste li sigurni da želite obrisati termin?");
+    if (r == true) {
+        document.getElementById(id).submit();
+    } else {
+        toastr["error"]('Morate potvrditi brisanje!');
+    }
+}
+
+
+confirmAc = function(id) {
+    var r = confirm("Jeste li sigurni da želite prihvatiti posao?");
+    if (r == true) {
+        document.getElementById(id).submit();
+    } else {
+        toastr["error"]('Morate potvrditi odbijanje!');
+    }
+}
+
+confirmRe = function(id) {
+    var r = confirm("Jeste li sigurni da želite odbiti posao?");
+    if (r == true) {
+        document.getElementById(id).submit();
+    } else {
+        toastr["error"]('Morate potvrditi odbijanje!');
+    }
+}

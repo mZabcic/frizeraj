@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\WorkingDay;
-use App\Assignment;
+use App\Assignment as Assignment;
+use App\CommentAndStar as CommentAndStar;
 use App\User;
 use App\Job;
 use App\WantedHairstyle;
@@ -210,5 +211,87 @@ class AssignmentController extends Controller
         } else {
             return redirect('/termini')->with('greska',"Termin zauzet");
         }
+    }
+    public function mojiTermini(){
+      $user = Auth::user();
+      $currentTime = Carbon::now();
+      $termini = Assignment::where('customer_id','=',$user->id)->orderBy('start_at')->get();
+      return view('mojiTermini')->with('termini',$termini)->with('time',$currentTime);
+    }
+
+    public function terminDetails($id){
+      $termin = Assignment::where('id','=',$id)->first();
+      $komentari = CommentAndStar::where('assignment_id','=',$termin->id)->get();
+      return view('termin')->with('termin',$termin)->with('komentari', $komentari);
+    }
+
+    public function prihvati($id){
+      $termin = Assignment::where('id','=',$id)->first();
+      $termin->confirmed = 1;
+      $termin->save();
+      return redirect()->back()->with('message',"Termin je prihvaćen!");
+    }
+
+    public function odbi($id){
+       try {
+            Assignment::where('id', '=', $id)->delete();
+        } catch (Exception $e) {
+            return redirect('/termini')->with('greska', 'Nije moguće obrisati zapis!');
+        }
+        return redirect('/termini')->with('message', 'Termin je odbijen i obrisan');
+    }
+
+    public function deleteTermin($id) {
+        try {
+            Assignment::where('id', '=', $id)->delete();
+        } catch (Exception $e) {
+            return redirect()->back()->with('greska', 'Nije moguće obrisati zapis!');
+        }
+        return redirect()->back()->with('message', 'Termin je uspješno obrisan.');
+    } 
+
+    public function komentiraj($id) {
+        return view('komentar')->with('assingment_id', $id);
+    }
+
+    public function komentirajPost(Request $request) {
+         $data = $request->all();
+           $messages = [
+    'required'    => 'Polje :attribute je obavezno!'
+];
+        $validator = Validator::make($data, [
+            'komentar' => 'required'
+        ], $messages);
+
+        if ($validator->fails()) {
+            return redirect('termin/' . $data['assignment_id'] .'/komentiraj')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        
+        if ($request->hasFile('hairstyle')) {
+            $img = Image::make(Input::file('hairstyle')->getRealPath());
+                $img->resize(null, 200, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+CommentAndStar::create([
+             'assignment_id' => $data['assignment_id'],
+             'comment' => $data['komentar'],
+             'stars' => $data['Star-input'],
+             'picture' => $img->encode('data-url'),
+              'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+         ]);
+        } else {
+         CommentAndStar::create([
+             'assignment_id' => $data['assignment_id'],
+             'comment' => $data['komentar'],
+             'stars' => $data['Star-input'],
+              'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+         ]);
+        }
+
+       return redirect('termini/moji')->with('message', 'Termin je uspješno komentiran.');
     }
 }

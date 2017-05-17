@@ -15,4 +15,8 @@ class Assignment extends Model
     public function job(){
       return $this->hasOne('App\Job','id','job_id');
     }
+
+     public function working_day(){
+      return $this->hasOne('App\WorkingDay','id','working_day_id');
+    }
 }

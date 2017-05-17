@@ -64,3 +64,17 @@ Route::delete('/admin/posao/{id}/obrisi', 'AdminJobsController@obrisiPosao')->mi
 
 Route::get('/admin/frizer/{id}/vrijeme', 'UserController@radnoVrijeme')->middleware('role:admin');
 Route::post('/admin/frizer/{id}/vrijeme', 'UserController@promijeniRadnoVrijeme')->middleware('role:admin')->name('promijeniRadnoVrijeme');
+Route::get('/termini/moji', 'AssignmentController@mojiTermini')->middleware('role:customer');
+Route::get('/termin/{id}/komentiraj', 'AssignmentController@komentiraj')->middleware('role:customer');
+Route::post('/termin/komentiraj', 'AssignmentController@komentirajPost')->middleware('role:customer');
+Route::get('/termin/{id}', 'AssignmentController@terminDetails');
+
+Route::post('/termin/{id}/prihvati', 'AssignmentController@prihvati')->middleware('role:hairdresser');
+Route::post('/termin/{id}/odbi', 'AssignmentController@odbi')->middleware('role:hairdresser');
+
+Route::delete('/termini/{id}/delete', 'AssignmentController@deleteTermin')->middleware('role:customer');
+
+Route::get('pic/{id}', 'HomeController@showPicture');
+
+Route::get('userPic/{id}', 'HomeController@showPictureRating');
+
