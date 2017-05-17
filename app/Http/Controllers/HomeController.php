@@ -62,8 +62,9 @@ class HomeController extends Controller
              $prosjek[$item->id] = 0;
         }
       }
+      $user = Auth::user();
       //return $data[0]->working_days;
-      return view('frizeri')->with('data', $data)->with('count', $numOf)->with("working_days",$working_days)->with("prosjek", $prosjek);
+      return view('frizeri')->with('data', $data)->with('count', $numOf)->with("working_days",$working_days)->with("prosjek", $prosjek)->with('customer',$user);
     }
 
 

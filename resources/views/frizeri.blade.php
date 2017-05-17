@@ -57,10 +57,16 @@
           <footer class="card-footer">
             <div class="card-footer-item">
               <div class="like-content">
-                @if(!Auth::guest())
+                @if(Auth::user()->hasRole('customer'))
+                @if ($customer->favorite_hairdresser == $user->id)
                 <button class="btn-secondary like-review" onclick="omiljeni({{$user->id}})">
                   <i class="fa fa-heart" aria-hidden="true"></i>
                 </button>
+                @else
+                <button style="    background: blue;" class="btn-secondary like-review" onclick="omiljeni({{$user->id}})">
+                  <i class="fa fa-heart" aria-hidden="true"></i>
+                </button>
+                @endif
                 @endif
               </div>
             </div>
