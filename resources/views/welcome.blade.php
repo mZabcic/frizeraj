@@ -30,7 +30,7 @@
                     <div class="is-child tile">
 
                         <br />
-                        <input class="btn btn-success" type="button" id="routebtn" value="Prikaži put do salona" />
+                        <input style="margin-bottom:10px;" class="btn btn-success" type="button" id="routebtn" value="Prikaži put do salona" />
                         <div id="googleMap" style="width:100%;height:300px;"></div>
                     </div>
                     <div class="is-child tile is-1">

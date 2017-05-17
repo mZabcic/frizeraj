@@ -319,4 +319,8 @@ public function admin_credential_rules(array $data)
       }
       return redirect('/admin/frizeri')->with('message',"Radno vrijeme promjenjeno.");
     }
+
+
+
+
 }

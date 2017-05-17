@@ -36,6 +36,7 @@
                           <table class="wd-table" id="wd-table">
                           <th style="text-align:center;"> Od </th>
                           <th style="text-align:center;"> Do </th>
+                        
                         @foreach($working_days as $key=>$working_day)
                         <tr id="tr{{$key}}">
 

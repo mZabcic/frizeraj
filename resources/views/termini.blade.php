@@ -87,6 +87,14 @@ function colorfunc(id){
 
             <div class="panel panel-default">
                 <div class="panel-heading">Termini</div>
+				@if (Auth::user()->hasRole('customer'))
+				 <a style="margin: 10px" href="/termini/moji" class="button is-large">
+    <span class="icon is-medium">
+      <i class="fa fa-address-card"></i>
+    </span>
+    <span>Moji rezervirani termini</span>
+  </a>
+  @endif
 
                 <div class="panel-body">
                   <div id="calendar"></div>

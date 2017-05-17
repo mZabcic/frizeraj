@@ -9,6 +9,11 @@ use App\User;
 use App\Role;
 use Illuminate\Support\Facades\Auth;
 use App\WorkingDay;
+use App\Assignment as Assignment;
+use App\WantedHairstyle as WantedHairstyle;
+use Image;
+use Illuminate\Support\Facades\Response;
+use App\CommentAndStar as CommentAndStar;
 
 class HomeController extends Controller
 {
@@ -60,5 +65,31 @@ class HomeController extends Controller
         } else {
             return back();
         }
+    }
+
+    public function showPicture($id)
+    {
+        $picId =  Assignment::findOrFail($id);
+        $picture = WantedHairstyle::findOrFail($picId->wanted_hairstyle_id);
+        $pic = Image::make($picture->picture);
+        $response = Response::make($pic->encode('jpeg'));
+
+        //setting content-type
+        $response->header('Content-Type', 'image/jpeg');
+
+        return $response;
+    }
+
+    public function showPictureRating($id)
+    {
+       
+        $picture = CommentAndStar::where('id','=',$id)->first();
+        $pic = Image::make($picture->picture);
+        $response = Response::make($pic->encode('jpeg'));
+
+        //setting content-type
+        $response->header('Content-Type', 'image/jpeg');
+
+        return $response;
     }
 }
