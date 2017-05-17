@@ -64,10 +64,12 @@
                 @endif
               </div>
             </div>
+             <div class="card-footer-item" style="background-color: lightgray;">
             <div class="star-ratings-css">
                       <!-- Samo treba broj pretvorit u postotak pa ubaucit u width -->
                       <div class="star-ratings-css-top" style="width: {{$prosjek[$user->id] / 6 * 100}}%"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
                       <div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            </div>
             </div>
             <div class="card-footer-item">
               <a class="button is-primary is-medium" href="/frizer/{{$user->id}}">Detalji</a>

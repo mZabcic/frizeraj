@@ -24,7 +24,7 @@
           {{$termin->start_at->format('d. m. Y.')}}
         </td>
           <td>
-          {{$termin->start_at->format('h : m')}}
+          {{$termin->start_at->format('H : m')}}
         </td>
           <td>
           {{$termin->job->duration_in_minutes}} minuta
@@ -92,13 +92,13 @@
   <tbody>
   
     @foreach($termini as $termin)
-    @if ($termin->start_at->lt($time) && $termin->confirmed == 1)
+    @if ($termin->start_at < $time  && $termin->confirmed == 1)
    <tr>
        <td>
           {{$termin->start_at->format('d. m. Y.')}}
         </td>
           <td>
-          {{$termin->start_at->format('h : m')}}
+          {{$termin->start_at->format('H : m')}}
         </td>
           <td>
           {{$termin->job->duration_in_minutes}} minuta
