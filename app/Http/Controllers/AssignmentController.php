@@ -215,7 +215,7 @@ class AssignmentController extends Controller
     public function mojiTermini(){
       $user = Auth::user();
       $currentTime = Carbon::now();
-      $termini = Assignment::where('customer_id','=',$user->id)->orderBy('start_at')->get();
+      $termini = Assignment::where('customer_id','=',$user->id)->orderBy('start_at', 'DESC')->get();
       return view('mojiTermini')->with('termini',$termini)->with('time',$currentTime);
     }
 

@@ -51,21 +51,28 @@
         <h2 class="title is-4" style="text-align:center"><strong>KOMENTARI:</strong></h2>
         <div >
           <div class="box" style="background-color:#f2f2f2">
-          @for ($i = 0; $i < 10; $i++)
+          @foreach ($comments_and_stars as $comment)
+          @if ($comment->assignment->working_day->user->id == $hairdresser->id)
           <article class="media">
             <figure class="media-left">
-              <img id="myImg{{$i}}" src="http://bulma.io/images/placeholders/1280x960.png" alt="slika" width="200" height="150">
-              <div id="myModal{{$i}}" class="modal">
-                <span class="close" onclick="document.getElementById('myModal{{$i}}').style.display='none'">&times;</span>
-                <img class="modal-content" id="img{{$i}}">
+                @if ($comment->picture == null)
+              <img id="" src="http://bulma.io/images/placeholders/1280x960.png" alt="slika" width="200" height="150">
+              @else 
+              <img id="" src="/userPic/{{$comment->id}}" alt="slika" width="200" height="150">
+              @endif
+              <div id="" class="modal">
+                <span class="close" onclick="document.getElementById('').style.display='none'">&times;</span>
+                <img class="modal-content" id="">
                 <div id="caption"></div>
             </figure>
             <div class="media-content">
               <div class="content">
                 <p>
-                  <strong>John Smith</strong>
+                  <strong>{{$comment->assignment->user->first_name}} {{$comment->assignment->user->last_name}}</strong>
                   <br>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                  <a href="/termin/{{$comment->assignment->id}}">{{$comment->assignment->job->name}} -> kliknite za više informacija</a>
+                  <br>
+                  {{$comment->comment}}
                 </p>
               </div>
               <div class="level is-mobile">
@@ -73,7 +80,7 @@
                   <div class="level-item">
                     <div class="star-ratings-css">
                       <!-- Samo treba broj pretvorit u postotak pa ubaucit u width -->
-                      <div class="star-ratings-css-top" style="width: 50%"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                      <div class="star-ratings-css-top" style="width: {{$comment->stars / 6 * 100}}%"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
                       <div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
                     </div>
                   </div>
@@ -81,7 +88,8 @@
               </div>
             </div>
           </article>
-          @endfor
+          @endif
+          @endforeach
         </div>
         </div>
       </div>

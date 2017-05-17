@@ -14,6 +14,7 @@ use App\WantedHairstyle as WantedHairstyle;
 use Image;
 use Illuminate\Support\Facades\Response;
 use App\CommentAndStar as CommentAndStar;
+use DB;
 
 class HomeController extends Controller
 {
@@ -34,10 +35,35 @@ class HomeController extends Controller
 
     public function frizeri(){
       $numOf = User::with('roleNav')->where('role','=',2)->count();
-      $data = User::with('roleNav')->where('role','=',2)->orderBy('last_name')->paginate(13);
+      $data = User::with('roleNav')->where('role','=',2)->orderBy('last_name')->paginate(15);
       $working_days = WorkingDay::where('until',">=",Carbon::now())->get();
+      $i = 0;
+      $prosjek = array();
+      foreach ($data as $item ){
+      $count = DB::table('comments_and_stars')
+            ->join('assignments', 'assignments.id', '=', 'comments_and_stars.assignment_id')
+            ->join('working_days', 'working_days.id', '=', 'assignments.working_day_id')
+            ->join('users', 'users.id', '=', 'working_days.user_id')
+            ->where('users.id','=',$item->id)
+            ->where('comments_and_stars.stars','>',0)
+            ->select('comments_and_stars.stars')
+            ->count();
+        $sum = DB::table('comments_and_stars')
+            ->join('assignments', 'assignments.id', '=', 'comments_and_stars.assignment_id')
+            ->join('working_days', 'working_days.id', '=', 'assignments.working_day_id')
+            ->join('users', 'users.id', '=', 'working_days.user_id')
+            ->where('users.id','=',$item->id)
+            ->where('comments_and_stars.stars','>',0)
+            ->select('comments_and_stars.stars')
+            ->sum('comments_and_stars.stars');
+        if ($count > 0){
+            $prosjek[$item->id] = $sum / $count;
+        } else {
+             $prosjek[$item->id] = 0;
+        }
+      }
       //return $data[0]->working_days;
-      return view('frizeri')->with('data', $data)->with('count', $numOf)->with("working_days",$working_days);
+      return view('frizeri')->with('data', $data)->with('count', $numOf)->with("working_days",$working_days)->with("prosjek", $prosjek);
     }
 
 
@@ -58,10 +84,11 @@ class HomeController extends Controller
     public function frizer($frizer_id)
     {
         $hairdresser = User::where('id', $frizer_id)->first();
+     $comments = CommentAndStar::all();
         if ($hairdresser && $hairdresser->hasRole('hairdresser')) {
             $working_days = WorkingDay::where('user_id', $frizer_id)->where('until', ">=", Carbon::now())->paginate(5);
             $favorites = User::where('favorite_hairdresser', $frizer_id)->count();
-            return view('frizer')->with("hairdresser", $hairdresser)->with("working_days", $working_days)->with('favorites', $favorites);
+            return view('frizer')->with("hairdresser", $hairdresser)->with("working_days", $working_days)->with('favorites', $favorites)->with('comments_and_stars',  $comments);
         } else {
             return back();
         }

@@ -64,9 +64,11 @@
                 @endif
               </div>
             </div>
-            <a class="card-footer-item">
-              <div id="rate{{$user->id}}"></div>
-            </a>
+            <div class="star-ratings-css">
+                      <!-- Samo treba broj pretvorit u postotak pa ubaucit u width -->
+                      <div class="star-ratings-css-top" style="width: {{$prosjek[$user->id] / 6 * 100}}%"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                      <div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            </div>
             <div class="card-footer-item">
               <a class="button is-primary is-medium" href="/frizer/{{$user->id}}">Detalji</a>
             </div>
@@ -76,6 +78,42 @@
   @endforeach
 </div>
 <style>
+
+
+
+
+
+/* Zvjezdice */
+.star-ratings-css {
+  unicode-bidi: bidi-override;
+  color: #ffffff;
+  font-size: 25px;
+  height: 25px;
+  width: 125px;
+  margin: 0 auto;
+  position: relative;
+  padding: 0;
+  text-shadow: 0px 1px 0 #a2a2a2;
+}th, td{
+  text-align: center !important;
+}
+  .star-ratings-css-top {
+    color: #e7711b;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+    display: block;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  .star-ratings-css-bottom {
+    padding: 0;
+    display: block;
+    z-index: 0;
+  }
+
+
 .table {
   background-color: #f2f2f2;
 }
